@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-container":"#8eca89","surface":"#f2fcf0","on-error":"#ffffff","primary-fixed-dim":"#99d593","on-secondary-fixed-variant":"#0e5138","on-tertiary-fixed-variant":"#005235","outline-variant":"#c1c9bc","surface-tint":"#326a33","primary-container":"#1e5622","on-surface":"#151e16","on-secondary":"#ffffff","on-primary-fixed-variant":"#19511e","secondary":"#2c694e","on-surface-variant":"#41493f","secondary-fixed-dim":"#95d4b3","on-secondary-container":"#316e52","inverse-on-surface":"#eaf4e7","error-container":"#ffdad6","surface-container-low":"#ecf6ea","surface-variant":"#dbe5d9","error":"#ba1a1a","surface-bright":"#f2fcf0","on-tertiary-fixed":"#002113","background":"#f2fcf0","on-tertiary":"#ffffff","outline":"#71796e","secondary-fixed":"#b1f0ce","surface-container-highest":"#dbe5d9","tertiary-fixed":"#92f7c3","on-primary-fixed":"#002204","tertiary-container":"#005739","on-error-container":"#93000a","surface-container-high":"#e1ebdf","surface-dim":"#d3ddd1","on-tertiary-container":"#6bcf9e","primary":"#003e0d","inverse-surface":"#2a332b","inverse-primary":"#99d593","primary-fixed":"#b4f2ad","tertiary-fixed-dim":"#75daa8","on-secondary-fixed":"#002114","surface-container-lowest":"#ffffff","on-primary":"#ffffff","surface-container":"#e7f1e5","tertiary":"#003d27","secondary-container":"#aeeecb","on-background":"#151e16"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"gutter-md":"1rem","gutter-xl":"2rem","gutter-sm":"0.5rem","table-density-compact":"0.375rem","margin-desktop":"1.5rem","gutter-lg":"1.5rem","table-density-comfortable":"0.625rem","margin-mobile":"0.75rem","gutter-xs":"0.25rem"},"fontFamily":{"body-sm":["Inter"],"data-mono":["Inter"],"table-header":["Inter"],"display-lg":["Inter"],"body-md":["Inter"],"headline-sm":["Inter"],"label-sm":["Inter"],"label-md":["Inter"],"headline-lg":["Inter"],"table-cell":["Inter"],"headline-md":["Inter"],"body-lg":["Inter"]},"fontSize":{"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"data-mono":["13px",{"lineHeight":"18px","letterSpacing":"0.03em","fontWeight":"500"}],"table-header":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"700"}],"display-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"table-cell":["13px",{"lineHeight":"18px","fontWeight":"400"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased">
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-primary-container text-on-primary shadow-[0_2px_8px_rgba(0,0,0,0.18)]"><div class="h-14 w-full px-margin-desktop flex items-center justify-between gap-gutter-md"><div class="flex items-center gap-gutter-md"><button class="p-gutter-xs text-on-primary hover:bg-primary rounded-lg transition-colors flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[24px]">menu</span></button><div class="flex items-center gap-gutter-sm"><span class="material-symbols-outlined text-secondary-fixed text-[26px]">inventory_2</span><span class="font-headline-sm text-headline-sm tracking-tight text-on-primary font-semibold truncate select-none">Control de Ingresos OSAWMS</span></div></div><div class="flex-1 max-w-xl mx-auto hidden md:block"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-3 text-outline-variant text-[20px] pointer-events-none">search</span><input class="w-full pl-10 pr-4 py-1.5 bg-surface text-on-surface placeholder:text-outline rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary-fixed" placeholder="Buscar materiales, EAN, ubicación o lote..." type="text"/></div></div><div class="flex items-center gap-gutter-sm"><button class="p-gutter-xs text-on-primary hover:bg-primary rounded-lg transition-colors flex items-center justify-center" id="syncBtn" onclick="loadData(true)" title="Sincronizar Datos" type="button"><span class="material-symbols-outlined text-[22px]">sync</span></button><button class="flex items-center gap-gutter-xs bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed transition-colors px-3 py-1.5 rounded-lg text-label-md font-label-md" type="button"><span class="material-symbols-outlined text-[20px]">qr_code_scanner</span><span class="hidden sm:inline font-semibold">Escanear</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center border border-secondary-fixed-dim/30"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header>
+
+<aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between py-margin-desktop shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-gutter-xs"><div class="px-gutter-md pb-gutter-sm text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Módulos de Almacén</div><nav class="flex flex-col gap-1 px-gutter-sm" id="moduleNav"><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg bg-secondary-container text-on-secondary-container font-semibold" data-module="compras" href="#" onclick="showModule('compras');return false;"><span class="material-symbols-outlined text-[22px]">format_list_bulleted</span><span class="text-body-md font-body-md">Detalle de Compras</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="entradas" href="#" onclick="showModule('entradas');return false;"><span class="material-symbols-outlined text-[22px]">move_to_inbox</span><span class="text-body-md font-body-md">Registro de Entradas y Recepción</span></a><a class="flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[22px]">warehouse</span><span class="text-body-md font-body-md">Ubicaciones</span></a><a class="flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[22px]">tune</span><span class="text-body-md font-body-md">Ajustes de Stock</span></a><a class="flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[22px]">settings</span><span class="text-body-md font-body-md">Configuración</span></a></nav></div><div class="px-gutter-md flex flex-col gap-gutter-xs"><div class="p-gutter-sm bg-surface-container rounded-lg flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-secondary" id="syncDot"></span><span class="text-label-sm font-label-sm text-on-surface-variant font-medium" id="syncLabel">Cargando datos...</span></div><span class="material-symbols-outlined text-outline text-[18px]">cloud_done</span></div><div class="text-label-sm font-label-sm text-outline px-1">v1.0 • Fuente: Google Sheets</div></div></aside>
+
+<div class="pl-64"><main class="w-full pt-14 bg-background min-h-screen px-margin-desktop py-gutter-lg"><div class="flex flex-col w-full gap-gutter-md">
+
+<div id="moduleCompras" class="flex flex-col w-full gap-gutter-md">
+<div class="flex flex-col gap-gutter-sm bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-gutter-md">
+<div class="flex items-center gap-gutter-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[24px]">swipe_left</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Gestión de Existencias por Referencia</h1>
+<span class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">Tabla WITCUS</span>
+</div>
+<div class="flex items-center gap-gutter-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span id="syncTimeLabel">Sincronizando...</span>
+<span class="text-outline">•</span>
+<span class="font-data-mono text-data-mono font-medium" id="skuCountLabel">0 líneas activas</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-gutter-xs shrink-0 flex-wrap">
+<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="loadData(true)" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Sincronizar</span>
+</button>
+<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="exportComprasXLS()" type="button">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span class="hidden sm:inline">Descargar XLS</span>
+</button>
+<button class="flex items-center gap-gutter-xs bg-secondary hover:bg-secondary/90 text-on-secondary px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">barcode_scanner</span>
+<span>Escanear Lote/EAN</span>
+</button>
+</div>
+</div>
+
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-gutter-sm pt-gutter-xs">
+<div class="relative flex-1 max-w-2xl">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[20px]">filter_list</span>
+<input class="w-full pl-10 pr-10 py-2 bg-surface-container text-on-surface placeholder:text-outline rounded-lg text-body-md font-body-md focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary transition-all" id="skuFilterInput" oninput="renderTable()" placeholder="Buscar por WITCUS, descripción, lote WLTCUS, WDREF o EAN..." type="text"/>
+<button class="absolute right-2.5 top-2 text-outline hover:text-on-surface" onclick="document.getElementById('skuFilterInput').value='';renderTable();" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0" id="chipBar">
+<button class="chip px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md flex items-center gap-1.5 shrink-0 shadow-sm" data-chip="todos" onclick="setChip('todos')" type="button">
+<span class="material-symbols-outlined text-[16px]">check</span>
+<span id="chipTodosLabel">Todos (0)</span>
+</button>
+<button class="chip px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shrink-0" data-chip="stock" onclick="setChip('stock')" type="button">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Con Stock (&gt;0)</span>
+</button>
+<button class="chip px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shrink-0" data-chip="vencen" onclick="setChip('vencen')" type="button">
+<span class="material-symbols-outlined text-[15px] text-tertiary">alarm</span>
+<span>Vencen &lt; 90d</span>
+</button>
+<button class="chip px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shrink-0" data-chip="loteNuevo" onclick="setChip('loteNuevo')" type="button">
+<span class="material-symbols-outlined text-[15px]">rule</span>
+<span>Con Lote Nuevo</span>
+</button>
+</div>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasDocumento">Documento</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasDocumento" onchange="renderTable()">
+<option value="">Todos</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasProveedor">Proveedor</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasProveedor" onchange="renderTable()">
+<option value="">Todos</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasOC">OC</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasOC" onchange="renderTable()">
+<option value="">Todos</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasCodigo">Código (WITCUS)</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasCodigo" onchange="renderTable()">
+<option value="">Todos</option>
+</select>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter-md items-start">
+<div class="xl:col-span-8 flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="flex items-center justify-between px-gutter-md py-gutter-sm bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">table_rows</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Partidas de Almacén</span>
+<span class="bg-surface-container-highest font-label-sm text-label-sm text-on-surface-variant px-2 py-0.5 rounded-md font-semibold" id="matchCountLabel">0 Coincidencias</span>
+</div>
+<div class="flex items-center gap-gutter-xs text-outline text-body-sm font-body-sm">
+<span class="hidden md:inline">Orden: WSEQ (Ascendente)</span>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full border-collapse text-left">
+<thead>
+<tr class="bg-[#1E5622] text-white">
+<th class="py-3 px-3 font-table-header text-table-header text-center w-10" scope="col"><input class="w-4 h-4 accent-secondary-fixed cursor-pointer" id="comprasSelectAll" onclick="toggleComprasSelectAll(this.checked)" type="checkbox"/></th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WITCUS</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[220px]" scope="col">Descripción del material</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-right min-w-[90px]" scope="col">WQTY</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[120px]" scope="col">WLTCUS</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WEXPDT</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-right min-w-[140px]" scope="col">EAN</th>
+<th class="py-3 px-3 font-table-header text-table-header uppercase tracking-wider text-center w-16" scope="col">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container" id="tableBody">
+<tr><td class="py-6 px-3.5 text-center text-outline" colspan="8">Cargando datos desde Google Sheets...</td></tr>
+</tbody>
+</table>
+</div>
+<div class="flex items-center justify-between px-gutter-md py-gutter-sm bg-surface-container-lowest text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-2">
+<span id="footerCountLabel">Mostrando 0 registros</span>
+</div>
+</div>
+</div>
+
+<div class="xl:col-span-4 flex flex-col bg-surface-container-lowest rounded-xl shadow-md overflow-hidden">
+<div class="bg-[#1E5622] text-white p-gutter-md flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="bg-white/20 text-white font-label-sm text-label-sm px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">Detalle de Registro WITCUS</span>
+<div class="flex items-center gap-1">
+<button class="p-1 hover:bg-white/10 rounded text-white" title="Imprimir etiqueta" type="button"><span class="material-symbols-outlined text-[20px]">print</span></button>
+<button class="p-1 hover:bg-white/10 rounded text-white" title="Compartir partida" type="button"><span class="material-symbols-outlined text-[20px]">share</span></button>
+</div>
+</div>
+<div>
+<h2 class="font-headline-lg text-headline-lg text-white font-bold leading-tight" id="detailTitle">Selecciona una línea</h2>
+<p class="text-white/80 font-body-sm text-body-sm flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">local_shipping</span>
+<span>Pedido (WDREF): <span class="font-semibold text-white" id="detailWdref">—</span></span>
+</p>
+</div>
+</div>
+
+<div class="p-gutter-md flex flex-col gap-gutter-md">
+<div class="bg-surface-container-low p-gutter-md rounded-xl flex flex-col items-center justify-center gap-2">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold">Código EAN-13</span>
+<div class="w-full max-w-[280px] bg-white p-3 rounded-lg flex flex-col items-center shadow-sm">
+<svg class="w-full h-14" preserveAspectRatio="none" viewBox="0 0 280 60">
+<rect fill="#151E16" height="55" width="3" x="10" y="0"></rect><rect fill="#151E16" height="55" width="3" x="15" y="0"></rect>
+<rect fill="#151E16" height="48" width="5" x="24" y="0"></rect><rect fill="#151E16" height="48" width="2" x="33" y="0"></rect><rect fill="#151E16" height="48" width="7" x="38" y="0"></rect><rect fill="#151E16" height="48" width="4" x="49" y="0"></rect><rect fill="#151E16" height="48" width="2" x="58" y="0"></rect><rect fill="#151E16" height="48" width="6" x="64" y="0"></rect><rect fill="#151E16" height="48" width="4" x="75" y="0"></rect><rect fill="#151E16" height="48" width="3" x="83" y="0"></rect><rect fill="#151E16" height="48" width="5" x="91" y="0"></rect><rect fill="#151E16" height="48" width="2" x="101" y="0"></rect><rect fill="#151E16" height="48" width="8" x="108" y="0"></rect><rect fill="#151E16" height="48" width="3" x="120" y="0"></rect><rect fill="#151E16" height="48" width="4" x="127" y="0"></rect>
+<rect fill="#151E16" height="55" width="3" x="136" y="0"></rect><rect fill="#151E16" height="55" width="3" x="142" y="0"></rect>
+<rect fill="#151E16" height="48" width="5" x="151" y="0"></rect><rect fill="#151E16" height="48" width="2" x="160" y="0"></rect><rect fill="#151E16" height="48" width="6" x="166" y="0"></rect><rect fill="#151E16" height="48" width="3" x="176" y="0"></rect><rect fill="#151E16" height="48" width="5" x="184" y="0"></rect><rect fill="#151E16" height="48" width="4" x="194" y="0"></rect><rect fill="#151E16" height="48" width="7" x="202" y="0"></rect><rect fill="#151E16" height="48" width="2" x="214" y="0"></rect><rect fill="#151E16" height="48" width="4" x="220" y="0"></rect><rect fill="#151E16" height="48" width="6" x="229" y="0"></rect><rect fill="#151E16" height="48" width="3" x="240" y="0"></rect><rect fill="#151E16" height="48" width="5" x="248" y="0"></rect><rect fill="#151E16" height="48" width="2" x="258" y="0"></rect>
+<rect fill="#151E16" height="55" width="3" x="264" y="0"></rect><rect fill="#151E16" height="55" width="3" x="269" y="0"></rect>
+</svg>
+<div class="flex items-center justify-between w-full px-2 mt-1 font-data-mono text-data-mono font-bold tracking-widest text-on-surface">
+<span id="detailEan">—</span>
+<button class="text-secondary hover:text-primary" id="copyEanBtn" title="Copiar EAN" type="button"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-2 gap-gutter-sm">
+<div class="p-3 bg-surface-container rounded-lg flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Código WITCUS</span>
+<div class="flex items-center justify-between">
+<span class="font-data-mono text-data-mono font-bold text-on-surface" id="detailWitcus">—</span>
+<button class="text-outline hover:text-on-surface" id="copyWitcusBtn" title="Copiar" type="button"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+</div>
+</div>
+<div class="p-3 bg-surface-container rounded-lg flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Lote (WLTCUS)</span>
+<div class="flex items-center justify-between">
+<span class="font-data-mono text-data-mono font-bold text-on-surface" id="detailLote">—</span>
+<span class="material-symbols-outlined text-[16px] text-secondary" id="detailLoteIcon">verified</span>
+</div>
+</div>
+<div class="p-3 bg-surface-container rounded-lg flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Vencimiento (WEXPDT)</span>
+<div class="flex items-center justify-between">
+<span class="font-data-mono text-data-mono font-bold text-on-surface" id="detailWexpdt">—</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-semibold" id="detailBadge">—</span>
+</div>
+</div>
+<div class="p-3 bg-surface-container rounded-lg flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Cantidad Solicitada (WQTY)</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-outline">shopping_cart</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold" id="detailQtySolicitada">—</span>
+</div>
+</div>
+</div>
+
+<div class="p-gutter-sm bg-surface-container rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Cantidad Ingresada (INGRESO)</span>
+<span class="font-body-sm text-body-sm text-outline">Unidades / Piezas</span>
+</div>
+<div class="flex items-center justify-between gap-gutter-sm bg-surface-container-lowest p-2 rounded-lg shadow-sm">
+<button class="w-10 h-10 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center font-headline-sm text-headline-sm transition-colors" onclick="adjustQty(-1)" type="button"><span class="material-symbols-outlined">remove</span></button>
+<div class="flex flex-col items-center">
+<span class="font-display-lg text-display-lg font-bold text-primary leading-none" id="qtyDisplay">0</span>
+<span class="text-label-sm font-label-sm text-outline mt-0.5">Bultos (vista local)</span>
+</div>
+<button class="w-10 h-10 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center font-headline-sm text-headline-sm transition-colors" onclick="adjustQty(1)" type="button"><span class="material-symbols-outlined">add</span></button>
+</div>
+</div>
+
+<div class="grid grid-cols-2 gap-gutter-sm text-body-sm">
+<div class="p-3 bg-surface-container rounded-lg flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Pendiente</span>
+<span class="font-data-mono text-data-mono font-semibold text-on-surface" id="detailPendiente">—</span>
+</div>
+<div class="p-3 bg-surface-container rounded-lg flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Lote Nuevo</span>
+<span class="font-data-mono text-data-mono font-semibold text-on-surface" id="detailLoteNuevo">—</span>
+</div>
+</div>
+</div>
+
+<div class="bg-surface-container-low px-gutter-md py-gutter-xs flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span id="detailProveedor">Proveedor: —</span>
+<span class="font-data-mono" id="detailIdData">ID: —</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="hidden flex flex-col w-full gap-gutter-md" id="moduleEntradas">
+<div class="flex flex-col gap-gutter-sm bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-gutter-md">
+<div class="flex items-center gap-gutter-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[24px]">move_to_inbox</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Registro de Entradas y Recepción</h1>
+<span class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">Tabla Entradas</span>
+</div>
+<div class="flex items-center gap-gutter-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="w-2 h-2 rounded-full bg-secondary" id="entradasSyncDot"></span>
+<span id="entradasSyncTimeLabel">Sincronizando...</span>
+<span class="text-outline">•</span>
+<span class="font-data-mono text-data-mono font-medium" id="entradasCountLabel">0 registros</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-gutter-xs shrink-0 flex-wrap">
+<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="loadEntradasData(true)" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Sincronizar</span>
+</button>
+<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="exportEntradasXLS()" type="button">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span class="hidden sm:inline">Descargar XLS</span>
+</button>
+</div>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterDocumento">Documento</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterDocumento" onchange="renderEntradasTable()">
+<option value="">Todos</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterProveedor">Proveedor</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterProveedor" onchange="renderEntradasTable()">
+<option value="">Todos</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterOC">OC</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterOC" onchange="renderEntradasTable()">
+<option value="">Todos</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterCodigo">Código (WITCUS)</label>
+<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterCodigo" onchange="renderEntradasTable()">
+<option value="">Todos</option>
+</select>
+</div>
+</div>
+</div>
+
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="flex items-center justify-between px-gutter-md py-gutter-sm bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">table_rows</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Detalle de Recepción</span>
+<span class="bg-surface-container-highest font-label-sm text-label-sm text-on-surface-variant px-2 py-0.5 rounded-md font-semibold" id="entradasMatchCountLabel">0 Coincidencias</span>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full border-collapse text-left">
+<thead>
+<tr class="bg-[#1E5622] text-white">
+<th class="py-3 px-3 font-table-header text-table-header text-center w-10" scope="col"><input class="w-4 h-4 accent-secondary-fixed cursor-pointer" id="entradasSelectAll" onclick="toggleEntradasSelectAll(this.checked)" type="checkbox"/></th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[110px]" scope="col">Usuario</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[180px]" scope="col">Proveedor</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[120px]" scope="col">OC</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[140px]" scope="col">Documento</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[80px]" scope="col">Tipo</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[90px]" scope="col">WCUST</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WDREF</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[80px]" scope="col">WSEQ</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[80px]" scope="col">WTYPE</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WITCUS</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-right min-w-[80px]" scope="col">WQTY</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WLTCUS</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WEXPDT</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[100px]" scope="col">WNRANA</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WINGDT</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WTHCMT</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container" id="entradasTableBody">
+<tr><td class="py-6 px-3.5 text-center text-outline" colspan="17">Cargando datos desde Google Sheets...</td></tr>
+</tbody>
+</table>
+</div>
+<div class="flex items-center justify-between px-gutter-md py-gutter-sm bg-surface-container-lowest text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-2">
+<span id="entradasFooterCountLabel">Mostrando 0 registros</span>
+</div>
+</div>
+</div>
+</div>
+
+</main></div>
+
+<script>
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzu8zoScnh6fHCa1fPfbf27EgI-zRbNaK3PWOu0Otyw-9KjNphlW8fNlZsUSTT7GPq-K8SwOyCE8O0/pub?gid=1377983639&single=true&output=csv";
+const ENTRADAS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzu8zoScnh6fHCa1fPfbf27EgI-zRbNaK3PWOu0Otyw-9KjNphlW8fNlZsUSTT7GPq-K8SwOyCE8O0/pub?gid=517494292&single=true&output=csv";
+
+// Columnas visibles del módulo de Entradas: solo las cabeceras verdes y naranjas de la hoja
+// (se excluye ESTATUS, que en la hoja original tiene un color distinto)
+const ENTRADAS_COLUMNS = [
+  { key: 'USUARIO',  label: 'Usuario' },
+  { key: 'PROVEEDOR', label: 'Proveedor' },
+  { key: 'OC',        label: 'OC' },
+  { key: 'DOCUMENTO', label: 'Documento' },
+  { key: 'TIPO',      label: 'Tipo' },
+  { key: 'WCUST',     label: 'WCUST' },
+  { key: 'WDREF',     label: 'WDREF' },
+  { key: 'WSEQ',      label: 'WSEQ' },
+  { key: 'WTYPE',     label: 'WTYPE' },
+  { key: 'WITCUS',    label: 'WITCUS' },
+  { key: 'WQTY',      label: 'WQTY' },
+  { key: 'WLTCUS',    label: 'WLTCUS' },
+  { key: 'WEXPDT',    label: 'WEXPDT' },
+  { key: 'WNRANA',    label: 'WNRANA' },
+  { key: 'WINGDT',    label: 'WINGDT' },
+  { key: 'WTHCMT',    label: 'WTHCMT' },
+];
+const ENTRADAS_DATE_KEYS = ['WEXPDT', 'WINGDT'];
+
+let allData = [];
+let currentIndex = -1;
+let activeChip = 'todos';
+let selectedCompras = new Set();
+
+let entradasData = [];
+let entradasLoaded = false;
+let selectedEntradas = new Set();
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], next = text[i + 1];
+    if (inQuotes) {
+      if (c === '"' && next === '"') { field += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else { field += c; }
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\r') { /* skip */ }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+      else field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.length > 1 || (r.length === 1 && r[0] !== ''));
+}
+
+function toObjects(rows) {
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1).map(r => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (r[i] !== undefined ? r[i].trim() : ''));
+    return obj;
+  });
+}
+
+function parseDate(str) {
+  if (!str) return null;
+  str = str.trim();
+  if (/^\d{8}$/.test(str)) {
+    return new Date(+str.substring(0,4), +str.substring(4,6) - 1, +str.substring(6,8));
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    const [y,m,d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  const d = new Date(str);
+  return isNaN(d) ? null : d;
+}
+
+function formatDate(str) {
+  const d = parseDate(str);
+  if (!d) return str || '—';
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  return `${dd} / ${mm} / ${d.getFullYear()}`;
+}
+
+function expiryStatus(str) {
+  const d = parseDate(str);
+  if (!d) return {label: 'Sin dato', cls: 'bg-surface-container-high text-on-surface-variant'};
+  const days = Math.floor((d - new Date()) / 86400000);
+  if (days < 0) return {label: 'Vencido', cls: 'bg-error-container text-on-error-container'};
+  if (days < 90) return {label: 'Por Vencer', cls: 'bg-error-container/60 text-on-error-container'};
+  return {label: 'Vigente', cls: 'bg-secondary-container text-on-secondary-container'};
+}
+
+async function loadData(isManualSync) {
+  const syncLabel = document.getElementById('syncLabel');
+  const syncDot = document.getElementById('syncDot');
+  syncLabel.innerText = 'Sincronizando...';
+  syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-tertiary');
+  try {
+    const res = await fetch(CSV_URL + (isManualSync ? '&_=' + Date.now() : ''));
+    const text = await res.text();
+    const rows = parseCSV(text);
+    allData = toObjects(rows);
+    syncLabel.innerText = 'Online Sync';
+    syncDot.classList.remove('bg-tertiary'); syncDot.classList.add('bg-secondary');
+    document.getElementById('syncTimeLabel').innerText = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+    populateComprasFilters();
+    renderTable();
+    if (allData.length) selectRow(0);
+  } catch (err) {
+    syncLabel.innerText = 'Error de sincronización';
+    syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-error');
+    document.getElementById('tableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="8">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
+    console.error(err);
+  }
+}
+
+function setChip(chip) {
+  activeChip = chip;
+  document.querySelectorAll('.chip').forEach(b => {
+    b.classList.remove('bg-secondary-container','text-on-secondary-container','shadow-sm');
+    b.classList.add('bg-surface-container','text-on-surface-variant');
+  });
+  const btn = document.querySelector(`.chip[data-chip="${chip}"]`);
+  btn.classList.remove('bg-surface-container','text-on-surface-variant');
+  btn.classList.add('bg-secondary-container','text-on-secondary-container','shadow-sm');
+  renderTable();
+}
+
+function populateComprasFilters() {
+  const fillSelect = (id, key) => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const current = sel.value;
+    const values = Array.from(new Set(allData.map(r => (r[key] || '').trim()).filter(Boolean))).sort();
+    sel.innerHTML = '<option value="">Todos</option>' + values.map(v => `<option value="${v.replace(/"/g,'&quot;')}">${v}</option>`).join('');
+    if (values.includes(current)) sel.value = current;
+  };
+  fillSelect('filterComprasDocumento', 'DOCUMENTO');
+  fillSelect('filterComprasProveedor', 'RAZON SOCIAL DEL PROVEEDOR');
+  fillSelect('filterComprasOC', 'OC');
+  fillSelect('filterComprasCodigo', 'WITCUS');
+}
+
+function filteredData() {
+  const q = document.getElementById('skuFilterInput').value.trim().toLowerCase();
+  const fDocumento = document.getElementById('filterComprasDocumento').value;
+  const fProveedor = document.getElementById('filterComprasProveedor').value;
+  const fOC = document.getElementById('filterComprasOC').value;
+  const fCodigo = document.getElementById('filterComprasCodigo').value;
+  return allData.filter(r => {
+    if (q) {
+      const hay = [r.WITCUS, r['Descripción del material'], r.WLTCUS, r.EAN, r.WDREF]
+        .join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (fDocumento && (r.DOCUMENTO || '') !== fDocumento) return false;
+    if (fProveedor && (r['RAZON SOCIAL DEL PROVEEDOR'] || '') !== fProveedor) return false;
+    if (fOC && (r.OC || '') !== fOC) return false;
+    if (fCodigo && (r.WITCUS || '') !== fCodigo) return false;
+    if (activeChip === 'stock') return parseFloat(r.WQTY || 0) > 0;
+    if (activeChip === 'vencen') {
+      const d = parseDate(r.WEXPDT);
+      if (!d) return false;
+      const days = Math.floor((d - new Date()) / 86400000);
+      return days >= 0 && days < 90;
+    }
+    if (activeChip === 'loteNuevo') return !!(r.WLTCUS_NUEVO && r.WLTCUS_NUEVO.trim());
+    return true;
+  });
+}
+
+function renderTable() {
+  const data = filteredData();
+  const tbody = document.getElementById('tableBody');
+  document.getElementById('chipTodosLabel').innerText = `Todos (${allData.length})`;
+  document.getElementById('skuCountLabel').innerText = `${allData.length} líneas activas`;
+  document.getElementById('matchCountLabel').innerText = `${data.length} Coincidencias`;
+  document.getElementById('footerCountLabel').innerText = `Mostrando ${data.length} de ${allData.length} registros`;
+
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-outline" colspan="8">Sin resultados para este filtro.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map((r) => {
+    const realIdx = allData.indexOf(r);
+    const status = expiryStatus(r.WEXPDT);
+    const qtyNum = parseFloat(r.WQTY || 0);
+    const qtyCls = qtyNum <= 5 ? 'bg-error-container/60 text-on-error-container' : 'bg-surface-container-high text-on-surface';
+    return `
+    <tr class="hover:bg-surface-container-low transition-colors cursor-pointer row-item" data-idx="${realIdx}" onclick="selectRow(${realIdx})">
+      <td class="py-3 px-3 text-center" onclick="event.stopPropagation()">
+        <input class="w-4 h-4 accent-secondary cursor-pointer compras-row-checkbox" data-idx="${realIdx}" onclick="toggleComprasSelect(${realIdx}, this.checked)" type="checkbox" ${selectedCompras.has(realIdx) ? 'checked' : ''}/>
+      </td>
+      <td class="py-3 px-3.5 font-data-mono text-data-mono text-on-surface flex items-center gap-2">
+        <span class="w-1.5 h-6 rounded-full bg-transparent shrink-0 row-bar"></span>
+        <span>${r.WITCUS || ''}</span>
+      </td>
+      <td class="py-3 px-3.5 font-body-md text-body-md text-on-surface">
+        <div class="flex flex-col">
+          <span>${r['Descripción del material'] || ''}</span>
+          <span class="text-label-sm font-label-sm text-outline font-normal">Pedido ${r.WDREF || '—'} • Seq ${r.WSEQ || '—'}</span>
+        </div>
+      </td>
+      <td class="py-3 px-3.5 text-right font-data-mono text-data-mono font-semibold">
+        <span class="${qtyCls} px-2 py-0.5 rounded">${r.WQTY || 0}</span>
+      </td>
+      <td class="py-3 px-3.5 text-center font-data-mono text-data-mono text-on-surface-variant">
+        <span class="bg-surface-container px-2 py-0.5 rounded">${r.WLTCUS || '—'}</span>
+      </td>
+      <td class="py-3 px-3.5 text-center font-data-mono text-data-mono text-on-surface-variant">
+        ${formatDate(r.WEXPDT)}
+      </td>
+      <td class="py-3 px-3.5 text-right font-data-mono text-data-mono text-on-surface">
+        <div class="flex items-center justify-end gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-outline">qr_code</span>
+          <span>${r.EAN || '—'}</span>
+        </div>
+      </td>
+      <td class="py-3 px-3 text-center">
+        <button class="p-1.5 text-outline hover:text-primary rounded-lg transition-colors" type="button">
+          <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function selectRow(idx) {
+  currentIndex = idx;
+  const r = allData[idx];
+  if (!r) return;
+
+  document.querySelectorAll('.row-item').forEach(tr => {
+    tr.classList.remove('bg-secondary-container/30');
+    const bar = tr.querySelector('.row-bar');
+    if (bar) bar.classList.replace('bg-primary','bg-transparent');
+  });
+  const activeTr = document.querySelector(`.row-item[data-idx="${idx}"]`);
+  if (activeTr) {
+    activeTr.classList.add('bg-secondary-container/30');
+    const bar = activeTr.querySelector('.row-bar');
+    if (bar) bar.classList.replace('bg-transparent','bg-primary');
+  }
+
+  document.getElementById('detailTitle').innerText = r['Descripción del material'] || 'Sin descripción';
+  document.getElementById('detailWdref').innerText = r.WDREF || '—';
+  document.getElementById('detailWitcus').innerText = r.WITCUS || '—';
+  document.getElementById('detailLote').innerText = r.WLTCUS || '—';
+  document.getElementById('detailEan').innerText = r.EAN || '—';
+  document.getElementById('detailWexpdt').innerText = formatDate(r.WEXPDT);
+  document.getElementById('detailQtySolicitada').innerText = r.WQTY || '—';
+  document.getElementById('detailPendiente').innerText = r.CANTIDAD || 'Sin asignar';
+  document.getElementById('detailLoteNuevo').innerText = r.WLTCUS_NUEVO || '—';
+  document.getElementById('detailProveedor').innerText = 'Proveedor: ' + (r['RAZON SOCIAL DEL PROVEEDOR'] || '—');
+  document.getElementById('detailIdData').innerText = 'ID: ' + (r.ID_DATA || '—');
+  document.getElementById('qtyDisplay').innerText = r.INGRESO || 0;
+
+  const status = expiryStatus(r.WEXPDT);
+  const badge = document.getElementById('detailBadge');
+  badge.innerText = status.label;
+  badge.className = 'font-label-sm text-label-sm px-1.5 py-0.5 rounded font-semibold ' + status.cls;
+
+  document.getElementById('copyEanBtn').onclick = () => navigator.clipboard.writeText(r.EAN || '');
+  document.getElementById('copyWitcusBtn').onclick = () => navigator.clipboard.writeText(r.WITCUS || '');
+}
+
+function adjustQty(delta) {
+  const display = document.getElementById('qtyDisplay');
+  let current = parseInt(display.innerText, 10) || 0;
+  current = Math.max(0, current + delta);
+  display.innerText = current;
+}
+
+/* ===================== SELECCIÓN Y EXPORTACIÓN XLS — DETALLE DE COMPRAS ===================== */
+
+function toggleComprasSelectAll(checked) {
+  const data = filteredData();
+  data.forEach(r => {
+    const idx = allData.indexOf(r);
+    if (checked) selectedCompras.add(idx); else selectedCompras.delete(idx);
+  });
+  renderTable();
+}
+
+function toggleComprasSelect(idx, checked) {
+  if (checked) selectedCompras.add(idx); else selectedCompras.delete(idx);
+  const allBox = document.getElementById('comprasSelectAll');
+  if (allBox) {
+    const data = filteredData();
+    allBox.checked = data.length > 0 && data.every(r => selectedCompras.has(allData.indexOf(r)));
+  }
+}
+
+function exportComprasXLS() {
+  const base = filteredData();
+  const data = selectedCompras.size
+    ? base.filter(r => selectedCompras.has(allData.indexOf(r)))
+    : base;
+  if (!data.length) return;
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Inventario WITCUS');
+  XLSX.writeFile(wb, 'inventario_witcus.xls', { bookType: 'biff8' });
+}
+
+/* ===================== MÓDULO: REGISTRO DE ENTRADAS Y RECEPCIÓN ===================== */
+
+function showModule(name) {
+  document.querySelectorAll('.nav-link').forEach(a => {
+    const active = a.dataset.module === name;
+    a.classList.toggle('bg-secondary-container', active);
+    a.classList.toggle('text-on-secondary-container', active);
+    a.classList.toggle('font-semibold', active);
+    a.classList.toggle('text-on-surface-variant', !active);
+  });
+  document.getElementById('moduleCompras').classList.toggle('hidden', name !== 'compras');
+  document.getElementById('moduleEntradas').classList.toggle('hidden', name !== 'entradas');
+
+  if (name === 'entradas' && !entradasLoaded) {
+    loadEntradasData(false);
+  }
+}
+
+async function loadEntradasData(isManualSync) {
+  const syncDot = document.getElementById('entradasSyncDot');
+  const syncTimeLabel = document.getElementById('entradasSyncTimeLabel');
+  syncTimeLabel.innerText = 'Sincronizando...';
+  syncDot.classList.remove('bg-secondary', 'bg-error'); syncDot.classList.add('bg-tertiary');
+  try {
+    const res = await fetch(ENTRADAS_CSV_URL + (isManualSync ? '&_=' + Date.now() : ''));
+    const text = await res.text();
+    const rows = parseCSV(text);
+    entradasData = toObjects(rows);
+    entradasLoaded = true;
+    selectedEntradas.clear();
+    syncDot.classList.remove('bg-tertiary'); syncDot.classList.add('bg-secondary');
+    syncTimeLabel.innerText = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit'});
+    populateEntradasFilters();
+    renderEntradasTable();
+  } catch (err) {
+    syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-error');
+    syncTimeLabel.innerText = 'Error de sincronización';
+    document.getElementById('entradasTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="17">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
+    console.error(err);
+  }
+}
+
+function populateEntradasFilters() {
+  const fillSelect = (id, key) => {
+    const sel = document.getElementById(id);
+    const current = sel.value;
+    const values = Array.from(new Set(entradasData.map(r => (r[key] || '').trim()).filter(Boolean))).sort();
+    sel.innerHTML = '<option value="">Todos</option>' + values.map(v => `<option value="${v.replace(/"/g,'&quot;')}">${v}</option>`).join('');
+    if (values.includes(current)) sel.value = current;
+  };
+  fillSelect('filterDocumento', 'DOCUMENTO');
+  fillSelect('filterProveedor', 'PROVEEDOR');
+  fillSelect('filterOC', 'OC');
+  fillSelect('filterCodigo', 'WITCUS');
+}
+
+function filteredEntradas() {
+  const fDocumento = document.getElementById('filterDocumento').value;
+  const fProveedor = document.getElementById('filterProveedor').value;
+  const fOC = document.getElementById('filterOC').value;
+  const fCodigo = document.getElementById('filterCodigo').value;
+  return entradasData.filter(r => {
+    if (fDocumento && (r.DOCUMENTO || '') !== fDocumento) return false;
+    if (fProveedor && (r.PROVEEDOR || '') !== fProveedor) return false;
+    if (fOC && (r.OC || '') !== fOC) return false;
+    if (fCodigo && (r.WITCUS || '') !== fCodigo) return false;
+    return true;
+  });
+}
+
+function renderEntradasTable() {
+  const data = filteredEntradas();
+  const tbody = document.getElementById('entradasTableBody');
+  document.getElementById('entradasCountLabel').innerText = `${entradasData.length} registros`;
+  document.getElementById('entradasMatchCountLabel').innerText = `${data.length} Coincidencias`;
+  document.getElementById('entradasFooterCountLabel').innerText = `Mostrando ${data.length} de ${entradasData.length} registros`;
+
+  const colCount = ENTRADAS_COLUMNS.length + 1;
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-outline" colspan="${colCount}">Sin resultados para este filtro.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map((r) => {
+    const realIdx = entradasData.indexOf(r);
+    const cells = ENTRADAS_COLUMNS.map(col => {
+      let val = r[col.key] || '';
+      if (ENTRADAS_DATE_KEYS.includes(col.key)) val = formatDate(val);
+      const align = (col.key === 'WQTY') ? 'text-right' : (['TIPO','WCUST','WSEQ','WTYPE','WLTCUS','WEXPDT','WNRANA','WINGDT'].includes(col.key) ? 'text-center' : 'text-left');
+      return `<td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface ${align}">${val || '—'}</td>`;
+    }).join('');
+    return `
+    <tr class="hover:bg-surface-container-low transition-colors">
+      <td class="py-2.5 px-3 text-center">
+        <input class="w-4 h-4 accent-secondary cursor-pointer" data-idx="${realIdx}" onclick="toggleEntradasSelect(${realIdx}, this.checked)" type="checkbox" ${selectedEntradas.has(realIdx) ? 'checked' : ''}/>
+      </td>
+      ${cells}
+    </tr>`;
+  }).join('');
+}
+
+function toggleEntradasSelectAll(checked) {
+  const data = filteredEntradas();
+  data.forEach(r => {
+    const idx = entradasData.indexOf(r);
+    if (checked) selectedEntradas.add(idx); else selectedEntradas.delete(idx);
+  });
+  renderEntradasTable();
+}
+
+function toggleEntradasSelect(idx, checked) {
+  if (checked) selectedEntradas.add(idx); else selectedEntradas.delete(idx);
+  const allBox = document.getElementById('entradasSelectAll');
+  if (allBox) {
+    const data = filteredEntradas();
+    allBox.checked = data.length > 0 && data.every(r => selectedEntradas.has(entradasData.indexOf(r)));
+  }
+}
+
+function exportEntradasXLS() {
+  const base = filteredEntradas();
+  const data = selectedEntradas.size
+    ? base.filter(r => selectedEntradas.has(entradasData.indexOf(r)))
+    : base;
+  if (!data.length) return;
+  const rows = data.map(r => {
+    const obj = {};
+    ENTRADAS_COLUMNS.forEach(col => { obj[col.label] = r[col.key] || ''; });
+    return obj;
+  });
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Entradas y Recepción');
+  XLSX.writeFile(wb, 'registro_entradas_recepcion.xls', { bookType: 'biff8' });
+}
+
+loadData(false);
+</script>
+</body></html>
