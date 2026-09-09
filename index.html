@@ -68,32 +68,7 @@
 </div>
 </div>
 
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs">
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasDocumento">Documento (WDREF)</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasDocumento" onchange="renderTable()">
-<option value="">Todos</option>
-</select>
-</div>
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasProveedor">Proveedor</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasProveedor" onchange="renderTable()">
-<option value="">Todos</option>
-</select>
-</div>
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasOC">OC</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasOC" onchange="renderTable()">
-<option value="">Todos</option>
-</select>
-</div>
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterComprasCodigo">Código (WITCUS)</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterComprasCodigo" onchange="renderTable()">
-<option value="">Todos</option>
-</select>
-</div>
-</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="comprasFiltersRow"></div>
 
 <div class="flex flex-wrap items-center gap-gutter-xs pt-gutter-xs border-t border-surface-container">
 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold mr-1">Plantilla de datos:</span>
@@ -111,7 +86,7 @@
 </div>
 
 <div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter-md items-start">
-<div class="xl:col-span-8 flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="xl:col-span-9 flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
 <div class="flex items-center justify-between px-gutter-md py-gutter-sm bg-surface-container-low">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-secondary text-[20px]">table_rows</span>
@@ -150,7 +125,7 @@
 </div>
 </div>
 
-<div class="xl:col-span-4 flex flex-col bg-surface-container-lowest rounded-xl shadow-md overflow-hidden">
+<div class="xl:col-span-3 flex flex-col bg-surface-container-lowest rounded-xl shadow-md overflow-hidden">
 <div class="bg-[#1E5622] text-white p-gutter-md flex flex-col gap-2">
 <div class="flex items-center justify-between">
 <span class="bg-white/20 text-white font-label-sm text-label-sm px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">Detalle de Registro WITCUS</span>
@@ -286,32 +261,7 @@
 </div>
 </div>
 
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs">
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterDocumento">Documento</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterDocumento" onchange="renderEntradasTable()">
-<option value="">Todos</option>
-</select>
-</div>
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterProveedor">Proveedor</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterProveedor" onchange="renderEntradasTable()">
-<option value="">Todos</option>
-</select>
-</div>
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterOC">OC</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterOC" onchange="renderEntradasTable()">
-<option value="">Todos</option>
-</select>
-</div>
-<div class="flex flex-col gap-1">
-<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="filterCodigo">Código (WITCUS)</label>
-<select class="w-full px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="filterCodigo" onchange="renderEntradasTable()">
-<option value="">Todos</option>
-</select>
-</div>
-</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="entradasFiltersRow"></div>
 </div>
 
 <div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
@@ -394,6 +344,153 @@ let selectedCompras = new Set();
 let entradasData = [];
 let entradasLoaded = false;
 let selectedEntradas = new Set();
+
+/* ===================== FILTROS MULTI-SELECCIÓN CON BÚSQUEDA (reutilizable) ===================== */
+
+const FILTER_CONFIGS = [
+  { row: 'comprasFiltersRow',  key: 'comprasDocumento', label: 'Documento (DOCUMENTO DE COMPRAS)', onChange: () => renderTable() },
+  { row: 'comprasFiltersRow',  key: 'comprasProveedor', label: 'Proveedor', onChange: () => renderTable() },
+  { row: 'comprasFiltersRow',  key: 'comprasOC',        label: 'OC (WDREF)', onChange: () => renderTable() },
+  { row: 'comprasFiltersRow',  key: 'comprasCodigo',    label: 'Código (WITCUS)', onChange: () => renderTable() },
+  { row: 'entradasFiltersRow', key: 'entradasDocumento', label: 'Documento', onChange: () => renderEntradasTable() },
+  { row: 'entradasFiltersRow', key: 'entradasProveedor', label: 'Proveedor', onChange: () => renderEntradasTable() },
+  { row: 'entradasFiltersRow', key: 'entradasOC',        label: 'OC', onChange: () => renderEntradasTable() },
+  { row: 'entradasFiltersRow', key: 'entradasCodigo',    label: 'Código (WITCUS)', onChange: () => renderEntradasTable() },
+];
+
+const filterState = {}; // { key: { values: string[], selected: Set<string>, onChange: fn } }
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function uniqueValues(arr, key) {
+  return Array.from(new Set(arr.map(r => (r[key] || '').toString().trim()).filter(Boolean))).sort();
+}
+
+function buildFilterWidgets() {
+  const byRow = {};
+  FILTER_CONFIGS.forEach(cfg => { (byRow[cfg.row] = byRow[cfg.row] || []).push(cfg); });
+  Object.keys(byRow).forEach(rowId => {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    row.innerHTML = byRow[rowId].map(cfg => `
+      <div class="flex flex-col gap-1 relative" data-filter-wrapper>
+        <label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">${cfg.label}</label>
+        <button class="w-full flex items-center justify-between gap-2 px-3 py-2 bg-surface-container text-on-surface rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" onclick="toggleFilterDropdown('${cfg.key}')" type="button">
+          <span class="truncate text-left" id="${cfg.key}Label">Todos</span>
+          <span class="material-symbols-outlined text-[18px] text-outline shrink-0">expand_more</span>
+        </button>
+        <div class="hidden filter-panel absolute z-30 top-full mt-1 left-0 right-0 bg-surface-container-lowest rounded-lg shadow-lg border border-surface-container-high max-h-64 flex flex-col" id="${cfg.key}Panel">
+          <div class="p-2 border-b border-surface-container-high">
+            <input class="w-full px-2 py-1.5 bg-surface-container rounded text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary" oninput="renderFilterOptions('${cfg.key}', this.value)" placeholder="Buscar..." type="text"/>
+          </div>
+          <div class="overflow-y-auto flex-1 p-1" id="${cfg.key}Options"></div>
+          <div class="flex items-center justify-between p-2 border-t border-surface-container-high">
+            <button class="text-secondary font-label-sm text-label-sm font-semibold" onclick="clearFilterSelection('${cfg.key}')" type="button">Limpiar</button>
+            <button class="text-secondary font-label-sm text-label-sm font-semibold" onclick="toggleFilterDropdown('${cfg.key}')" type="button">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  });
+}
+
+function initFilterMultiselect(key, values) {
+  const cfg = FILTER_CONFIGS.find(c => c.key === key);
+  const prevSelected = filterState[key] ? filterState[key].selected : new Set();
+  filterState[key] = {
+    values: values,
+    selected: new Set(Array.from(prevSelected).filter(v => values.includes(v))),
+    onChange: cfg ? cfg.onChange : () => {}
+  };
+  renderFilterOptions(key);
+  updateFilterLabel(key);
+}
+
+function renderFilterOptions(key, search) {
+  const st = filterState[key];
+  const container = document.getElementById(key + 'Options');
+  if (!st || !container) return;
+  const term = (search || '').toLowerCase();
+  const list = st.values.filter(v => v.toLowerCase().includes(term));
+  if (!list.length) {
+    container.innerHTML = '<div class="px-3 py-2 text-body-sm text-outline">Sin resultados</div>';
+    return;
+  }
+  container.innerHTML = list.map(v => {
+    const idx = st.values.indexOf(v);
+    return `<label class="flex items-center gap-2 px-3 py-1.5 rounded hover:bg-surface-container cursor-pointer text-body-sm">
+      <input class="w-4 h-4 accent-secondary filter-checkbox" data-key="${key}" data-idx="${idx}" type="checkbox" ${st.selected.has(v) ? 'checked' : ''}/>
+      <span class="truncate">${escapeHtml(v)}</span>
+    </label>`;
+  }).join('');
+}
+
+function updateFilterLabel(key) {
+  const st = filterState[key];
+  const labelEl = document.getElementById(key + 'Label');
+  if (!st || !labelEl) return;
+  if (st.selected.size === 0) labelEl.innerText = 'Todos';
+  else if (st.selected.size === 1) labelEl.innerText = Array.from(st.selected)[0];
+  else labelEl.innerText = `${st.selected.size} seleccionados`;
+}
+
+function matchesFilter(key, fieldVal) {
+  const st = filterState[key];
+  if (!st || st.selected.size === 0) return true;
+  return st.selected.has((fieldVal || '').toString().trim());
+}
+
+function toggleFilterDropdown(key) {
+  document.querySelectorAll('.filter-panel').forEach(p => {
+    if (p.id !== key + 'Panel') p.classList.add('hidden');
+  });
+  const panel = document.getElementById(key + 'Panel');
+  if (!panel) return;
+  const willOpen = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden');
+  if (willOpen) {
+    const input = panel.querySelector('input[type="text"]');
+    if (input) input.value = '';
+    renderFilterOptions(key);
+    if (input) input.focus();
+  }
+}
+
+function clearFilterSelection(key) {
+  const st = filterState[key];
+  if (!st) return;
+  st.selected.clear();
+  renderFilterOptions(key);
+  updateFilterLabel(key);
+  st.onChange();
+}
+
+document.addEventListener('change', (e) => {
+  if (e.target.classList.contains('filter-checkbox')) {
+    const key = e.target.dataset.key;
+    const idx = parseInt(e.target.dataset.idx, 10);
+    const st = filterState[key];
+    if (!st) return;
+    const val = st.values[idx];
+    if (e.target.checked) st.selected.add(val); else st.selected.delete(val);
+    updateFilterLabel(key);
+    st.onChange();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('[data-filter-wrapper]').forEach(wrapper => {
+    if (!wrapper.contains(e.target)) {
+      const panel = wrapper.querySelector('.filter-panel');
+      if (panel) panel.classList.add('hidden');
+    }
+  });
+});
+
+buildFilterWidgets();
 
 function parseCSV(text) {
   const rows = [];
@@ -493,36 +590,24 @@ function setChip(chip) {
 }
 
 function populateComprasFilters() {
-  const fillSelect = (id, key) => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    const current = sel.value;
-    const values = Array.from(new Set(allData.map(r => (r[key] || '').trim()).filter(Boolean))).sort();
-    sel.innerHTML = '<option value="">Todos</option>' + values.map(v => `<option value="${v.replace(/"/g,'&quot;')}">${v}</option>`).join('');
-    if (values.includes(current)) sel.value = current;
-  };
-  fillSelect('filterComprasDocumento', 'WDREF');
-  fillSelect('filterComprasProveedor', 'RAZON SOCIAL DEL PROVEEDOR');
-  fillSelect('filterComprasOC', 'OC');
-  fillSelect('filterComprasCodigo', 'WITCUS');
+  initFilterMultiselect('comprasDocumento', uniqueValues(allData, 'DOCUMENTO DE COMPRAS'));
+  initFilterMultiselect('comprasProveedor', uniqueValues(allData, 'RAZON SOCIAL DEL PROVEEDOR'));
+  initFilterMultiselect('comprasOC', uniqueValues(allData, 'WDREF'));
+  initFilterMultiselect('comprasCodigo', uniqueValues(allData, 'WITCUS'));
 }
 
 function filteredData() {
   const q = document.getElementById('skuFilterInput').value.trim().toLowerCase();
-  const fDocumento = document.getElementById('filterComprasDocumento').value;
-  const fProveedor = document.getElementById('filterComprasProveedor').value;
-  const fOC = document.getElementById('filterComprasOC').value;
-  const fCodigo = document.getElementById('filterComprasCodigo').value;
   return allData.filter(r => {
     if (q) {
       const hay = [r.WITCUS, r['Descripción del material'], r.WLTCUS, r.EAN, r.WDREF]
         .join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
-    if (fDocumento && (r.WDREF || '') !== fDocumento) return false;
-    if (fProveedor && (r['RAZON SOCIAL DEL PROVEEDOR'] || '') !== fProveedor) return false;
-    if (fOC && (r.OC || '') !== fOC) return false;
-    if (fCodigo && (r.WITCUS || '') !== fCodigo) return false;
+    if (!matchesFilter('comprasDocumento', r['DOCUMENTO DE COMPRAS'])) return false;
+    if (!matchesFilter('comprasProveedor', r['RAZON SOCIAL DEL PROVEEDOR'])) return false;
+    if (!matchesFilter('comprasOC', r.WDREF)) return false;
+    if (!matchesFilter('comprasCodigo', r.WITCUS)) return false;
     if (activeChip === 'stock') return parseFloat(r.WQTY || 0) > 0;
     if (activeChip === 'vencen') {
       const d = parseDate(r.WEXPDT);
@@ -777,9 +862,23 @@ function exportComprasXLS() {
 
 /* ===================== PLANTILLA: ALIMENTAR LA HOJA "data" SIN ABRIR GOOGLE SHEETS ===================== */
 
+// Orden real de columnas de la hoja "data" (ID_DATA va primero para facilitar
+// identificar/editar filas existentes; el resto sigue el orden visto en la hoja).
+const PLANTILLA_COLUMNS = [
+  'ID_DATA', 'WCUST', 'RAZON SOCIAL DEL PROVEEDOR', 'DOCUMENTO DE COMPRAS', 'WDREF',
+  'WSEQ', 'WTYPE', 'WITCUS', 'Descripción del material', 'WQTY', 'Precio Neto',
+  'Val. Bruto pedido', 'WLTCUS', 'WEXPDT', 'WNRANA', 'WINGDT', 'EAN', 'WTHCMT',
+  'CANTIDAD', 'INGRESO'
+];
+
 function descargarPlantilla() {
   if (!allData.length) return;
-  const ws = XLSX.utils.json_to_sheet(allData);
+  const rows = allData.map(r => {
+    const obj = {};
+    PLANTILLA_COLUMNS.forEach(col => { obj[col] = (r[col] !== undefined && r[col] !== null) ? r[col] : ''; });
+    return obj;
+  });
+  const ws = XLSX.utils.json_to_sheet(rows, { header: PLANTILLA_COLUMNS });
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Plantilla');
   XLSX.writeFile(wb, 'plantilla_witcus.xlsx');
@@ -870,29 +969,18 @@ async function loadEntradasData(isManualSync) {
 }
 
 function populateEntradasFilters() {
-  const fillSelect = (id, key) => {
-    const sel = document.getElementById(id);
-    const current = sel.value;
-    const values = Array.from(new Set(entradasData.map(r => (r[key] || '').trim()).filter(Boolean))).sort();
-    sel.innerHTML = '<option value="">Todos</option>' + values.map(v => `<option value="${v.replace(/"/g,'&quot;')}">${v}</option>`).join('');
-    if (values.includes(current)) sel.value = current;
-  };
-  fillSelect('filterDocumento', 'DOCUMENTO');
-  fillSelect('filterProveedor', 'PROVEEDOR');
-  fillSelect('filterOC', 'OC');
-  fillSelect('filterCodigo', 'WITCUS');
+  initFilterMultiselect('entradasDocumento', uniqueValues(entradasData, 'DOCUMENTO'));
+  initFilterMultiselect('entradasProveedor', uniqueValues(entradasData, 'PROVEEDOR'));
+  initFilterMultiselect('entradasOC', uniqueValues(entradasData, 'OC'));
+  initFilterMultiselect('entradasCodigo', uniqueValues(entradasData, 'WITCUS'));
 }
 
 function filteredEntradas() {
-  const fDocumento = document.getElementById('filterDocumento').value;
-  const fProveedor = document.getElementById('filterProveedor').value;
-  const fOC = document.getElementById('filterOC').value;
-  const fCodigo = document.getElementById('filterCodigo').value;
   return entradasData.filter(r => {
-    if (fDocumento && (r.DOCUMENTO || '') !== fDocumento) return false;
-    if (fProveedor && (r.PROVEEDOR || '') !== fProveedor) return false;
-    if (fOC && (r.OC || '') !== fOC) return false;
-    if (fCodigo && (r.WITCUS || '') !== fCodigo) return false;
+    if (!matchesFilter('entradasDocumento', r.DOCUMENTO)) return false;
+    if (!matchesFilter('entradasProveedor', r.PROVEEDOR)) return false;
+    if (!matchesFilter('entradasOC', r.OC)) return false;
+    if (!matchesFilter('entradasCodigo', r.WITCUS)) return false;
     return true;
   });
 }
