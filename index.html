@@ -258,10 +258,33 @@
 <span class="material-symbols-outlined text-[18px]">description</span>
 <span class="hidden sm:inline">Descargar XLS</span>
 </button>
+<button class="flex items-center gap-gutter-xs bg-secondary hover:bg-secondary/90 text-on-secondary px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="generarINGPRVW()" type="button">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span>INGPRVW</span>
+</button>
 </div>
 </div>
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="entradasFiltersRow"></div>
+
+<div class="hidden grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="entradasResumenBar">
+<div class="p-3 bg-surface-container rounded-lg flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Solicitadas</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface" id="resumenSolicitadas">0</span>
+</div>
+<div class="p-3 bg-secondary-container rounded-lg flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-on-secondary-container uppercase font-semibold">Conformes</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-secondary-container" id="resumenConformes">0</span>
+</div>
+<div class="p-3 bg-tertiary-container rounded-lg flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-on-tertiary-container uppercase font-semibold">Faltantes</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-tertiary-container" id="resumenFaltantes">0</span>
+</div>
+<div class="p-3 bg-error-container rounded-lg flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-on-error-container uppercase font-semibold">Mal Estado</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-error-container" id="resumenMalEstado">0</span>
+</div>
+</div>
 </div>
 
 <div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
@@ -991,6 +1014,7 @@ function renderEntradasTable() {
   document.getElementById('entradasCountLabel').innerText = `${entradasData.length} registros`;
   document.getElementById('entradasMatchCountLabel').innerText = `${data.length} Coincidencias`;
   document.getElementById('entradasFooterCountLabel').innerText = `Mostrando ${data.length} de ${entradasData.length} registros`;
+  updateEntradasResumen(data);
 
   const colCount = ENTRADAS_COLUMNS.length + 1;
   if (!data.length) {
@@ -1049,6 +1073,81 @@ function exportEntradasXLS() {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Entradas y Recepción');
   XLSX.writeFile(wb, 'registro_entradas_recepcion.xls', { bookType: 'biff8' });
+}
+
+/* ===================== RESUMEN SOLICITADO / CONFORME / FALTANTE / MAL ESTADO ===================== */
+// Supuesto: el estado de cada línea recibida se marca en WNRANA. Si el texto contiene
+// "MAL" se cuenta como Mal Estado; si está vacío o dice cualquier otra cosa, se cuenta
+// como Conforme. Avísame si el estado real vive en otra columna y lo ajusto.
+
+function isMalEstado(wnrana) {
+  return /mal/i.test((wnrana || '').toString());
+}
+
+function updateEntradasResumen(data) {
+  const bar = document.getElementById('entradasResumenBar');
+  const stDoc = filterState['entradasDocumento'];
+  const stOC = filterState['entradasOC'];
+  const activo = (stDoc && stDoc.selected.size > 0) || (stOC && stOC.selected.size > 0);
+  if (!activo) { bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+
+  let conformes = 0, malEstado = 0;
+  data.forEach(r => {
+    const qty = parseFloat(r.WQTY || 0) || 0;
+    if (isMalEstado(r.WNRANA)) malEstado += qty; else conformes += qty;
+  });
+
+  // Solicitado: se busca en la hoja de Compras (allData) filtrando por el mismo
+  // Documento (DOCUMENTO DE COMPRAS) y/o OC (WDREF) que estén seleccionados aquí.
+  const docsSeleccionados = stDoc ? Array.from(stDoc.selected) : [];
+  const ocsSeleccionados = stOC ? Array.from(stOC.selected) : [];
+  let solicitadas = 0;
+  allData.forEach(r => {
+    const matchDoc = docsSeleccionados.length ? docsSeleccionados.includes((r['DOCUMENTO DE COMPRAS'] || '').toString().trim()) : true;
+    const matchOC = ocsSeleccionados.length ? ocsSeleccionados.includes((r.WDREF || '').toString().trim()) : true;
+    if (matchDoc && matchOC) solicitadas += parseFloat(r.WQTY || 0) || 0;
+  });
+
+  const recibidas = conformes + malEstado;
+  const faltantes = Math.max(0, solicitadas - recibidas);
+
+  document.getElementById('resumenSolicitadas').innerText = solicitadas;
+  document.getElementById('resumenConformes').innerText = conformes;
+  document.getElementById('resumenFaltantes').innerText = faltantes;
+  document.getElementById('resumenMalEstado').innerText = malEstado;
+}
+
+/* ===================== BOTÓN INGPRVW ===================== */
+// Descarga la información seleccionada/filtrada de Entradas respetando exactamente
+// las cabeceras de la hoja física (WCUST, WDREF, WSEQ, WTYPE, WITCUS, WQTY, WLTCUS,
+// WEXPDT, WNRANA, WINGDT, WTHCMT), asigna el correlativo WSEQ por Documento, y marca
+// WNRANA como "CONFORME" cuando viene vacío. Archivo y hoja se llaman "INGPRVW".
+
+function generarINGPRVW() {
+  const base = filteredEntradas();
+  const data = selectedEntradas.size
+    ? base.filter(r => selectedEntradas.has(entradasData.indexOf(r)))
+    : base;
+  if (!data.length) return;
+
+  const INGPRVW_COLUMNS = ['WCUST', 'WDREF', 'WSEQ', 'WTYPE', 'WITCUS', 'WQTY', 'WLTCUS', 'WEXPDT', 'WNRANA', 'WINGDT', 'WTHCMT'];
+  const contadores = {};
+
+  const rows = data.map(r => {
+    const doc = (r.DOCUMENTO || '').toString().trim() || '(sin documento)';
+    contadores[doc] = (contadores[doc] || 0) + 1;
+    const obj = {};
+    INGPRVW_COLUMNS.forEach(col => { obj[col] = r[col] || ''; });
+    obj.WSEQ = contadores[doc];
+    obj.WNRANA = (r.WNRANA && r.WNRANA.toString().trim()) ? r.WNRANA : 'CONFORME';
+    return obj;
+  });
+
+  const ws = XLSX.utils.json_to_sheet(rows, { header: INGPRVW_COLUMNS });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'INGPRVW');
+  XLSX.writeFile(wb, 'INGPRVW.xls', { bookType: 'biff8' });
 }
 
 loadData(false);
