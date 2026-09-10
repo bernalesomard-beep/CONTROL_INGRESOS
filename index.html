@@ -76,12 +76,30 @@
 <span class="material-symbols-outlined text-[18px]">file_download</span>
 <span>Descargar Plantilla</span>
 </button>
-<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="document.getElementById('plantillaFileInput').click()" type="button">
+<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="abrirPlantillaModal()" type="button">
 <span class="material-symbols-outlined text-[18px]">file_upload</span>
 <span>Subir Plantilla</span>
 </button>
-<input accept=".xlsx,.xls,.csv" class="hidden" id="plantillaFileInput" onchange="subirPlantilla(this.files[0])" type="file"/>
-<span class="font-body-sm text-body-sm text-on-surface-variant" id="plantillaStatus"></span>
+</div>
+</div>
+
+<div class="hidden fixed inset-0 z-50 items-center justify-center bg-black/40 p-gutter-md" id="plantillaModal">
+<div class="bg-surface-container-lowest rounded-xl shadow-lg w-full max-w-md p-gutter-lg flex flex-col gap-gutter-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Subir Plantilla</h2>
+<button class="text-outline hover:text-on-surface" onclick="cerrarPlantillaModal()" type="button"><span class="material-symbols-outlined">close</span></button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Las filas del archivo se <strong>agregan</strong> al final de la hoja DATA (no se borra lo existente). El ID_DATA correlativo se asigna automáticamente.</p>
+<label class="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-surface-container-high rounded-lg p-gutter-lg cursor-pointer hover:bg-surface-container transition-colors" for="plantillaFileInput">
+<span class="material-symbols-outlined text-[32px] text-outline">upload_file</span>
+<span class="font-label-md text-label-md text-on-surface text-center" id="plantillaFileNameLabel">Haz clic para elegir un archivo (.xlsx, .xls, .csv)</span>
+<input accept=".xlsx,.xls,.csv" class="hidden" id="plantillaFileInput" onchange="onPlantillaFileSelected(this.files[0])" type="file"/>
+</label>
+<span class="font-body-sm text-body-sm" id="plantillaModalStatus"></span>
+<div class="flex justify-end gap-gutter-sm pt-gutter-xs">
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors" onclick="cerrarPlantillaModal()" type="button">Cancelar</button>
+<button class="px-4 py-2 rounded-lg bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md disabled:opacity-40 disabled:cursor-not-allowed transition-colors" disabled id="btnConfirmarSubirPlantilla" onclick="confirmarSubirPlantilla()" type="button">Subir</button>
+</div>
 </div>
 </div>
 
@@ -1083,29 +1101,62 @@ function descargarPlantilla() {
   XLSX.writeFile(wb, 'plantilla_witcus.xlsx');
 }
 
-function setPlantillaStatus(msg, isError) {
-  const el = document.getElementById('plantillaStatus');
+let plantillaArchivoSeleccionado = null;
+
+function abrirPlantillaModal() {
+  plantillaArchivoSeleccionado = null;
+  document.getElementById('plantillaFileInput').value = '';
+  document.getElementById('plantillaFileNameLabel').innerText = 'Haz clic para elegir un archivo (.xlsx, .xls, .csv)';
+  document.getElementById('btnConfirmarSubirPlantilla').disabled = true;
+  setPlantillaModalStatus('', false);
+  document.getElementById('plantillaModal').classList.remove('hidden');
+  document.getElementById('plantillaModal').classList.add('flex');
+}
+
+function cerrarPlantillaModal() {
+  document.getElementById('plantillaModal').classList.add('hidden');
+  document.getElementById('plantillaModal').classList.remove('flex');
+}
+
+function onPlantillaFileSelected(file) {
+  plantillaArchivoSeleccionado = file || null;
+  document.getElementById('plantillaFileNameLabel').innerText = file ? file.name : 'Haz clic para elegir un archivo (.xlsx, .xls, .csv)';
+  document.getElementById('btnConfirmarSubirPlantilla').disabled = !file;
+}
+
+function setPlantillaModalStatus(msg, isError) {
+  const el = document.getElementById('plantillaModalStatus');
   el.innerText = msg;
   el.classList.toggle('text-error', !!isError);
   el.classList.toggle('text-on-surface-variant', !isError);
 }
 
+function confirmarSubirPlantilla() {
+  if (!plantillaArchivoSeleccionado) return;
+  subirPlantilla(plantillaArchivoSeleccionado);
+}
+
+// Sube la plantilla en modo "agregar": las filas del archivo se suman al final
+// de la hoja DATA (no se borra lo existente), y el ID_DATA correlativo lo
+// calcula el Apps Script en base al mayor ID_DATA ya presente en la hoja.
 function subirPlantilla(file) {
   if (!file) return;
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('REEMPLAZA_CON') === 0) {
-    setPlantillaStatus('Falta configurar la URL de Apps Script.', true);
+    setPlantillaModalStatus('Falta configurar la URL de Apps Script.', true);
     return;
   }
-  setPlantillaStatus('Leyendo archivo...', false);
+  const btn = document.getElementById('btnConfirmarSubirPlantilla');
+  setPlantillaModalStatus('Leyendo archivo...', false);
+  btn.disabled = true;
   const reader = new FileReader();
   reader.onload = async (ev) => {
     try {
       const wb = XLSX.read(ev.target.result, { type: 'array' });
       const firstSheet = wb.Sheets[wb.SheetNames[0]];
       const filas = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
-      if (!filas.length) { setPlantillaStatus('El archivo no tiene filas de datos.', true); return; }
+      if (!filas.length) { setPlantillaModalStatus('El archivo no tiene filas de datos.', true); btn.disabled = false; return; }
 
-      setPlantillaStatus(`Subiendo ${filas.length} filas...`, false);
+      setPlantillaModalStatus(`Subiendo ${filas.length} filas...`, false);
       const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1113,13 +1164,14 @@ function subirPlantilla(file) {
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || 'Error desconocido');
-      setPlantillaStatus(`Listo: ${data.filasEscritas} filas actualizadas ✓`, false);
+      setPlantillaModalStatus(`Listo: ${data.filasEscritas} filas agregadas ✓ (ID_DATA ${data.primerIdData}–${data.ultimoIdData})`, false);
       loadData(true);
+      setTimeout(cerrarPlantillaModal, 1800);
     } catch (err) {
       console.error(err);
-      setPlantillaStatus('Error al subir: ' + err.message, true);
+      setPlantillaModalStatus('Error al subir: ' + err.message, true);
     } finally {
-      document.getElementById('plantillaFileInput').value = '';
+      btn.disabled = false;
     }
   };
   reader.readAsArrayBuffer(file);
@@ -1390,14 +1442,18 @@ function updateEntradasResumen(data) {
     if (isMalEstado(r.WNRANA)) malEstado += qty; else conformes += qty;
   });
 
-  // Solicitado: se busca en la hoja de Compras (allData) filtrando por el mismo
-  // Documento (DOCUMENTO DE COMPRAS) y/o OC (WDREF) que estén seleccionados aquí.
-  const docsSeleccionados = stDoc ? Array.from(stDoc.selected) : [];
-  const ocsSeleccionados = stOC ? Array.from(stOC.selected) : [];
+  // Solicitado: se busca en la hoja de Compras (allData). El campo "Documento"
+  // de Entradas corresponde al WDREF de Compras (mismo formato: T001-00000735),
+  // y el campo "OC" de Entradas corresponde a DOCUMENTO DE COMPRAS (el número
+  // de PO, ej. 4500012234). Se normalizan espacios/mayúsculas porque en la hoja
+  // real algunos valores traen espacios alrededor del guion (ej. "T001 - 0037").
+  const norm = (v) => (v || '').toString().replace(/\s+/g, '').toUpperCase();
+  const docsSeleccionados = stDoc ? Array.from(stDoc.selected).map(norm) : [];
+  const ocsSeleccionados = stOC ? Array.from(stOC.selected).map(norm) : [];
   let solicitadas = 0;
   allData.forEach(r => {
-    const matchDoc = docsSeleccionados.length ? docsSeleccionados.includes((r['DOCUMENTO DE COMPRAS'] || '').toString().trim()) : true;
-    const matchOC = ocsSeleccionados.length ? ocsSeleccionados.includes((r.WDREF || '').toString().trim()) : true;
+    const matchDoc = docsSeleccionados.length ? docsSeleccionados.includes(norm(r.WDREF)) : true;
+    const matchOC = ocsSeleccionados.length ? ocsSeleccionados.includes(norm(r['DOCUMENTO DE COMPRAS'])) : true;
     if (matchDoc && matchOC) solicitadas += parseFloat(r.WQTY || 0) || 0;
   });
 
@@ -1424,15 +1480,26 @@ function generarINGPRVW() {
   if (!data.length) return;
 
   const INGPRVW_COLUMNS = ['WCUST', 'WDREF', 'WSEQ', 'WTYPE', 'WITCUS', 'WQTY', 'WLTCUS', 'WEXPDT', 'WNRANA', 'WINGDT', 'WTHCMT'];
+  // Numéricas sin decimales: se exportan como número real (no texto) para que
+  // Excel las reconozca como tal. El resto se mantiene como texto.
+  const NUMERIC_COLUMNS = ['WCUST', 'WSEQ', 'WQTY', 'WEXPDT', 'WINGDT'];
   const contadores = {};
+
+  const toIntOrBlank = (val) => {
+    const n = parseInt(val, 10);
+    return isNaN(n) ? '' : n;
+  };
 
   const rows = data.map(r => {
     const doc = (r.DOCUMENTO || '').toString().trim() || '(sin documento)';
     contadores[doc] = (contadores[doc] || 0) + 1;
     const obj = {};
-    INGPRVW_COLUMNS.forEach(col => { obj[col] = r[col] || ''; });
+    INGPRVW_COLUMNS.forEach(col => {
+      const raw = r[col] || '';
+      obj[col] = NUMERIC_COLUMNS.includes(col) ? toIntOrBlank(raw) : raw.toString();
+    });
     obj.WSEQ = contadores[doc];
-    obj.WNRANA = (r.WNRANA && r.WNRANA.toString().trim()) ? r.WNRANA : 'CONFORME';
+    obj.WNRANA = ''; // siempre vacío, sin ninguna información
     return obj;
   });
 
