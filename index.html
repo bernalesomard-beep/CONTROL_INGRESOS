@@ -4,7 +4,7 @@
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-primary-container text-on-primary shadow-[0_2px_8px_rgba(0,0,0,0.18)]"><div class="h-14 w-full px-margin-desktop flex items-center justify-between gap-gutter-md"><div class="flex items-center gap-gutter-md"><button class="p-gutter-xs text-on-primary hover:bg-primary rounded-lg transition-colors flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[24px]">menu</span></button><div class="flex items-center gap-gutter-sm"><span class="material-symbols-outlined text-secondary-fixed text-[26px]">inventory_2</span><span class="font-headline-sm text-headline-sm tracking-tight text-on-primary font-semibold truncate select-none">Control de Ingresos OSAWMS</span></div></div><div class="flex-1 max-w-xl mx-auto hidden md:block"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-3 text-outline-variant text-[20px] pointer-events-none">search</span><input class="w-full pl-10 pr-4 py-1.5 bg-surface text-on-surface placeholder:text-outline rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary-fixed" placeholder="Buscar materiales, EAN, ubicación o lote..." type="text"/></div></div><div class="flex items-center gap-gutter-sm"><button class="p-gutter-xs text-on-primary hover:bg-primary rounded-lg transition-colors flex items-center justify-center" id="syncBtn" onclick="loadData(true)" title="Sincronizar Datos" type="button"><span class="material-symbols-outlined text-[22px]">sync</span></button><button class="flex items-center gap-gutter-xs bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed transition-colors px-3 py-1.5 rounded-lg text-label-md font-label-md" type="button"><span class="material-symbols-outlined text-[20px]">qr_code_scanner</span><span class="hidden sm:inline font-semibold">Escanear</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center border border-secondary-fixed-dim/30"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header>
 
-<aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between py-margin-desktop shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-gutter-xs"><div class="px-gutter-md pb-gutter-sm text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Módulos de Almacén</div><nav class="flex flex-col gap-1 px-gutter-sm" id="moduleNav"><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg bg-secondary-container text-on-secondary-container font-semibold" data-module="compras" href="#" onclick="showModule('compras');return false;"><span class="material-symbols-outlined text-[22px]">format_list_bulleted</span><span class="text-body-md font-body-md">Detalle de Compras</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="entradas" href="#" onclick="showModule('entradas');return false;"><span class="material-symbols-outlined text-[22px]">move_to_inbox</span><span class="text-body-md font-body-md">Registro de Entradas y Recepción</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="observaciones" href="#" onclick="showModule('observaciones');return false;"><span class="material-symbols-outlined text-[22px]">flag</span><span class="text-body-md font-body-md">Observaciones</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="usuarios" href="#" onclick="showModule('usuarios');return false;"><span class="material-symbols-outlined text-[22px]">badge</span><span class="text-body-md font-body-md">Registro de Usuario</span></a><a class="flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[22px]">settings</span><span class="text-body-md font-body-md">Configuración</span></a></nav></div><div class="px-gutter-md flex flex-col gap-gutter-xs"><div class="p-gutter-sm bg-surface-container rounded-lg flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-secondary" id="syncDot"></span><span class="text-label-sm font-label-sm text-on-surface-variant font-medium" id="syncLabel">Cargando datos...</span></div><span class="material-symbols-outlined text-outline text-[18px]">cloud_done</span></div><div class="text-label-sm font-label-sm text-outline px-1">v1.0 • Fuente: Google Sheets</div></div></aside>
+<aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between py-margin-desktop shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-gutter-xs"><div class="px-gutter-md pb-gutter-sm text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Módulos de Almacén</div><nav class="flex flex-col gap-1 px-gutter-sm" id="moduleNav"><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg bg-secondary-container text-on-secondary-container font-semibold" data-module="compras" href="#" onclick="showModule('compras');return false;"><span class="material-symbols-outlined text-[22px]">format_list_bulleted</span><span class="text-body-md font-body-md">Detalle de Compras</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="entradas" href="#" onclick="showModule('entradas');return false;"><span class="material-symbols-outlined text-[22px]">move_to_inbox</span><span class="text-body-md font-body-md">Registro de Entradas y Recepción</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="observaciones" href="#" onclick="showModule('observaciones');return false;"><span class="material-symbols-outlined text-[22px]">flag</span><span class="text-body-md font-body-md">Observaciones</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="usuarios" href="#" onclick="showModule('usuarios');return false;"><span class="material-symbols-outlined text-[22px]">badge</span><span class="text-body-md font-body-md">Registro de Usuario</span></a><a class="nav-link flex items-center gap-gutter-md px-gutter-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-module="maestra" href="#" onclick="showModule('maestra');return false;"><span class="material-symbols-outlined text-[22px]">inventory_2</span><span class="text-body-md font-body-md">Maestra de Artículos</span></a></nav></div><div class="px-gutter-md flex flex-col gap-gutter-xs"><div class="p-gutter-sm bg-surface-container rounded-lg flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-secondary" id="syncDot"></span><span class="text-label-sm font-label-sm text-on-surface-variant font-medium" id="syncLabel">Cargando datos...</span></div><span class="material-symbols-outlined text-outline text-[18px]">cloud_done</span></div><div class="text-label-sm font-label-sm text-outline px-1">v1.0 • Fuente: Google Sheets</div></div></aside>
 
 <div class="pl-64"><main class="w-full pt-14 bg-background min-h-screen px-margin-desktop py-gutter-lg"><div class="flex flex-col w-full gap-gutter-md">
 
@@ -37,6 +37,10 @@
 <span class="material-symbols-outlined text-[18px]">description</span>
 <span class="hidden sm:inline">Descargar XLS</span>
 </button>
+<button class="flex items-center gap-gutter-xs bg-error-container hover:bg-error-container/80 text-on-error-container px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="descargarCodigoNuevo()" type="button">
+<span class="material-symbols-outlined text-[18px]">fiber_new</span>
+<span class="hidden sm:inline">Código Nuevo</span>
+</button>
 </div>
 </div>
 
@@ -64,6 +68,10 @@
 <button class="chip px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shrink-0" data-chip="loteNuevo" onclick="setChip('loteNuevo')" type="button">
 <span class="material-symbols-outlined text-[15px]">rule</span>
 <span>Con Lote Nuevo</span>
+</button>
+<button class="chip px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shrink-0" data-chip="codigoNuevo" onclick="setChip('codigoNuevo')" type="button">
+<span class="material-symbols-outlined text-[15px] text-error">fiber_new</span>
+<span>Código Nuevo</span>
 </button>
 </div>
 </div>
@@ -334,10 +342,11 @@
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[100px]" scope="col">WNRANA</th>
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WINGDT</th>
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WTHCMT</th>
+<th class="py-3 px-3 font-table-header text-table-header uppercase tracking-wider text-center w-20" scope="col">Acciones</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-surface-container" id="entradasTableBody">
-<tr><td class="py-6 px-3.5 text-center text-outline" colspan="17">Cargando datos desde Google Sheets...</td></tr>
+<tr><td class="py-6 px-3.5 text-center text-outline" colspan="18">Cargando datos desde Google Sheets...</td></tr>
 </tbody>
 </table>
 </div>
@@ -488,6 +497,53 @@
 </thead>
 <tbody class="divide-y divide-surface-container" id="usuariosTableBody">
 <tr><td class="py-6 px-3.5 text-center text-outline" colspan="2">Cargando datos desde Google Sheets...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="hidden flex flex-col w-full gap-gutter-md" id="moduleMaestra">
+<div class="flex flex-col gap-gutter-sm bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-gutter-md">
+<div class="flex items-center gap-gutter-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[24px]">inventory_2</span>
+</div>
+<div class="flex flex-col min-w-0">
+<h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Maestra de Artículos</h1>
+<div class="flex items-center gap-gutter-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="w-2 h-2 rounded-full bg-secondary" id="maestraSyncDot"></span>
+<span id="maestraSyncTimeLabel">Sincronizando...</span>
+<span class="text-outline">•</span>
+<span class="font-data-mono text-data-mono font-medium" id="maestraCountLabel">0 artículos</span>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="loadMaestraData(true)" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Sincronizar</span>
+</button>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface-container rounded-lg text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-secondary" id="maestraFilterInput" oninput="renderMaestraTable()" placeholder="Buscar en la maestra de artículos..." type="text"/>
+</div>
+</div>
+
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="flex items-center justify-between px-gutter-md py-gutter-sm bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">inventory_2</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Artículos</span>
+<span class="bg-surface-container-highest font-label-sm text-label-sm text-on-surface-variant px-2 py-0.5 rounded-md font-semibold" id="maestraMatchCountLabel">0 Coincidencias</span>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full border-collapse text-left">
+<thead id="maestraTableHead"></thead>
+<tbody class="divide-y divide-surface-container" id="maestraTableBody">
+<tr><td class="py-6 px-3.5 text-center text-outline">Cargando datos desde Google Sheets...</td></tr>
 </tbody>
 </table>
 </div>
@@ -807,6 +863,7 @@ function filteredData() {
       return days >= 0 && days < 90;
     }
     if (activeChip === 'loteNuevo') return !!(r.WLTCUS_NUEVO && r.WLTCUS_NUEVO.trim());
+    if (activeChip === 'codigoNuevo') return esCodigoNuevo(r.WITCUS);
     return true;
   });
 }
@@ -834,9 +891,12 @@ function renderTable() {
       <td class="py-3 px-3 text-center" onclick="event.stopPropagation()">
         <input class="w-4 h-4 accent-secondary cursor-pointer compras-row-checkbox" data-idx="${realIdx}" onclick="toggleComprasSelect(${realIdx}, this.checked)" type="checkbox" ${selectedCompras.has(realIdx) ? 'checked' : ''}/>
       </td>
-      <td class="py-3 px-3.5 font-data-mono text-data-mono text-on-surface flex items-center gap-2">
-        <span class="w-1.5 h-6 rounded-full bg-transparent shrink-0 row-bar"></span>
-        <span>${r.WITCUS || ''}</span>
+      <td class="py-3 px-3.5 font-data-mono text-data-mono text-on-surface">
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-6 rounded-full bg-transparent shrink-0 row-bar"></span>
+          <span>${r.WITCUS || ''}</span>
+        </div>
+        ${esCodigoNuevo(r.WITCUS) ? '<span class="text-label-sm font-label-sm text-error font-semibold ml-3.5">Código Nuevo</span>' : ''}
       </td>
       <td class="py-3 px-3.5 font-body-md text-body-md text-on-surface">
         <div class="flex flex-col">
@@ -931,10 +991,25 @@ function adjustQty(delta) {
 // ⚠️ Reemplaza esta URL por la de tu Web App de Google Apps Script (ver Code.gs adjunto)
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4gjC-VHoQJA73hoaIgAojBMt2pTtfgpStu03sQNMrCxCWmmSMppWBpNX8STd--sVohg/exec";
 const USUARIOS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzu8zoScnh6fHCa1fPfbf27EgI-zRbNaK3PWOu0Otyw-9KjNphlW8fNlZsUSTT7GPq-K8SwOyCE8O0/pub?gid=0&single=true&output=csv";
+// ⚠️ Esta es una hoja/spreadsheet DISTINTA a la principal (Maestra de Artículos).
+const MAESTRA_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMljx9UbVppkAvRK0_8TeEo4AjwXrslkWifhKW6ABsJ5brryaZRsb9_cDEbszR2ymkqIbUQuu58pld/pub?gid=649948627&single=true&output=csv";
+// ⚠️ Supuesto: el nombre de la columna en la Maestra que contiene el código
+// WITCUS. No confirmado — si "Código Nuevo" nunca detecta nada o detecta todo,
+// probablemente este nombre no coincide con el real; avísame el nombre exacto.
+const MAESTRA_CODIGO_FIELD = 'WITCUS';
 
 let currentUser = null;
 let usuariosData = [];
 let usuariosLoaded = false;
+
+let maestraData = [];
+let maestraLoaded = false;
+let maestraCodigosSet = new Set();
+
+function esCodigoNuevo(witcus) {
+  if (!maestraLoaded) return false; // sin datos de la maestra aún, no se puede afirmar nada
+  return !maestraCodigosSet.has((witcus || '').toString().trim().toUpperCase());
+}
 
 // Valida Usuario ID + Código contra la hoja RECEPCION (USUARIO ID / CODIGO).
 // "CERRAR SESION" es un valor especial de esa hoja, no una credencial real,
@@ -1001,11 +1076,11 @@ async function guardarEntrada() {
           USUARIO: currentUser,
           PROVEEDOR: r['RAZON SOCIAL DEL PROVEEDOR'] || '',
           OC: r.OC || '',
-          DOCUMENTO: r.DOCUMENTO || '',
+          DOCUMENTO: r.WDREF || '',
           TIPO: 'CL',
           WCUST: r.WCUST || '',
           WDREF: r.WDREF || '',
-          WSEQ: r.WSEQ || '',
+          WSEQ: '',
           WTYPE: 'UA',
           WITCUS: r.WITCUS || '',
           WQTY: cantidad,
@@ -1013,7 +1088,7 @@ async function guardarEntrada() {
           WEXPDT: r.WEXPDT || '',
           WNRANA: r.WNRANA || '',
           WINGDT: fechaHoy,
-          WTHCMT: r.WTHCMT || ''
+          WTHCMT: r.WDREF || ''
         }
       })
     });
@@ -1191,12 +1266,16 @@ function showModule(name) {
   document.getElementById('moduleEntradas').classList.toggle('hidden', name !== 'entradas');
   document.getElementById('moduleObservaciones').classList.toggle('hidden', name !== 'observaciones');
   document.getElementById('moduleUsuarios').classList.toggle('hidden', name !== 'usuarios');
+  document.getElementById('moduleMaestra').classList.toggle('hidden', name !== 'maestra');
 
   if ((name === 'entradas' || name === 'observaciones') && !entradasLoaded) {
     loadEntradasData(false);
   }
   if (name === 'usuarios' && !usuariosLoaded) {
     loadUsuariosData(false);
+  }
+  if (name === 'maestra' && !maestraLoaded) {
+    loadMaestraData(false);
   }
 }
 
@@ -1231,7 +1310,7 @@ async function loadEntradasData(isManualSync) {
     obsSyncDot.classList.remove('bg-secondary'); obsSyncDot.classList.add('bg-error');
     syncTimeLabel.innerText = 'Error de sincronización';
     obsSyncTimeLabel.innerText = 'Error de sincronización';
-    document.getElementById('entradasTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="17">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
+    document.getElementById('entradasTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="18">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
     document.getElementById('observacionesTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="17">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
     console.error(err);
   }
@@ -1262,7 +1341,7 @@ function renderEntradasTable() {
   document.getElementById('entradasFooterCountLabel').innerText = `Mostrando ${data.length} de ${entradasData.length} registros`;
   updateEntradasResumen(data);
 
-  const colCount = ENTRADAS_COLUMNS.length + 1;
+  const colCount = ENTRADAS_COLUMNS.length + 2;
   if (!data.length) {
     tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-outline" colspan="${colCount}">Sin resultados para este filtro.</td></tr>`;
     return;
@@ -1282,6 +1361,14 @@ function renderEntradasTable() {
         <input class="w-4 h-4 accent-secondary cursor-pointer" data-idx="${realIdx}" onclick="toggleEntradasSelect(${realIdx}, this.checked)" type="checkbox" ${selectedEntradas.has(realIdx) ? 'checked' : ''}/>
       </td>
       ${cells}
+      <td class="py-2.5 px-3 text-center whitespace-nowrap">
+        <button class="p-1 text-outline hover:text-secondary rounded transition-colors" onclick="editarCantidadEntrada(${realIdx})" title="Editar cantidad (WQTY)" type="button">
+          <span class="material-symbols-outlined text-[18px]">edit</span>
+        </button>
+        <button class="p-1 text-outline hover:text-error rounded transition-colors" onclick="eliminarLineaEntrada(${realIdx})" title="Eliminar línea" type="button">
+          <span class="material-symbols-outlined text-[18px]">delete</span>
+        </button>
+      </td>
     </tr>`;
   }).join('');
 }
@@ -1301,6 +1388,60 @@ function toggleEntradasSelect(idx, checked) {
   if (allBox) {
     const data = filteredEntradas();
     allBox.checked = data.length > 0 && data.every(r => selectedEntradas.has(entradasData.indexOf(r)));
+  }
+}
+
+/* ===================== EDITAR CANTIDAD (WQTY) Y ELIMINAR LÍNEA — REGISTRO DE ENTRADAS ===================== */
+
+async function editarCantidadEntrada(idx) {
+  const r = entradasData[idx];
+  if (!r) return;
+  const idMov = r['ID MOV'];
+  if (!idMov) { alert('Este registro no tiene ID MOV, no se puede editar.'); return; }
+  const actual = r.WQTY || 0;
+  const input = prompt('Nueva cantidad (WQTY):', actual);
+  if (input === null) return;
+  const nuevaCantidad = parseInt(input, 10);
+  if (isNaN(nuevaCantidad) || nuevaCantidad < 0) { alert('Ingresa un número válido.'); return; }
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('REEMPLAZA_CON') === 0) { alert('Falta configurar la URL de Apps Script.'); return; }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'editarEntradaQty', idMov, nuevaCantidad })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Error desconocido');
+    r.WQTY = nuevaCantidad;
+    renderEntradasTable();
+  } catch (err) {
+    console.error(err);
+    alert('Error al editar: ' + err.message);
+  }
+}
+
+async function eliminarLineaEntrada(idx) {
+  const r = entradasData[idx];
+  if (!r) return;
+  const idMov = r['ID MOV'];
+  if (!idMov) { alert('Este registro no tiene ID MOV, no se puede eliminar.'); return; }
+  if (!confirm('¿Eliminar esta línea de la hoja de Entradas? Esta acción no se puede deshacer.')) return;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('REEMPLAZA_CON') === 0) { alert('Falta configurar la URL de Apps Script.'); return; }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'eliminarEntrada', idMov })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Error desconocido');
+    selectedEntradas.clear();
+    loadEntradasData(true);
+  } catch (err) {
+    console.error(err);
+    alert('Error al eliminar: ' + err.message);
   }
 }
 
@@ -1595,6 +1736,83 @@ async function guardarUsuario() {
   }
 }
 
+/* ===================== MÓDULO: MAESTRA DE ARTÍCULOS ===================== */
+// Hoja distinta a la principal. Se carga desde el inicio (no solo al entrar al
+// módulo) porque "Código Nuevo" en Compras depende de tenerla disponible.
+
+async function loadMaestraData(isManualSync) {
+  const syncDot = document.getElementById('maestraSyncDot');
+  const syncTimeLabel = document.getElementById('maestraSyncTimeLabel');
+  if (syncTimeLabel) syncTimeLabel.innerText = 'Sincronizando...';
+  if (syncDot) { syncDot.classList.remove('bg-secondary', 'bg-error'); syncDot.classList.add('bg-tertiary'); }
+  try {
+    const res = await fetch(MAESTRA_CSV_URL + (isManualSync ? '&_=' + Date.now() : ''));
+    const text = await res.text();
+    const rows = parseCSV(text);
+    maestraData = toObjects(rows);
+    maestraLoaded = true;
+    maestraCodigosSet = new Set(maestraData.map(r => (r[MAESTRA_CODIGO_FIELD] || '').toString().trim().toUpperCase()).filter(Boolean));
+    if (syncDot) { syncDot.classList.remove('bg-tertiary'); syncDot.classList.add('bg-secondary'); }
+    if (syncTimeLabel) syncTimeLabel.innerText = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit'});
+    renderMaestraTable();
+    if (allData.length) renderTable(); // refresca las etiquetas "Código Nuevo" en Compras
+  } catch (err) {
+    if (syncDot) { syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-error'); }
+    if (syncTimeLabel) syncTimeLabel.innerText = 'Error de sincronización';
+    const tbody = document.getElementById('maestraTableBody');
+    if (tbody) tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
+    console.error(err);
+  }
+}
+
+function renderMaestraTable() {
+  const thead = document.getElementById('maestraTableHead');
+  const tbody = document.getElementById('maestraTableBody');
+  if (!maestraData.length) return;
+
+  const headers = Object.keys(maestraData[0]);
+  thead.innerHTML = `<tr class="bg-[#1E5622] text-white">${headers.map(h =>
+    `<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left" scope="col">${escapeHtml(h)}</th>`
+  ).join('')}</tr>`;
+
+  const q = (document.getElementById('maestraFilterInput').value || '').trim().toLowerCase();
+  const data = q ? maestraData.filter(r => headers.some(h => (r[h] || '').toString().toLowerCase().includes(q))) : maestraData;
+
+  document.getElementById('maestraCountLabel').innerText = `${maestraData.length} artículos`;
+  document.getElementById('maestraMatchCountLabel').innerText = `${data.length} Coincidencias`;
+
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-outline" colspan="${headers.length}">Sin resultados para esta búsqueda.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(r => `
+    <tr class="hover:bg-surface-container-low transition-colors">
+      ${headers.map(h => `<td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface">${escapeHtml(r[h] || '') || '—'}</td>`).join('')}
+    </tr>`).join('');
+}
+
+/* ===================== "CÓDIGO NUEVO": DESCARGA DEL DETALLE ===================== */
+// Exporta, con estas cabeceras exactas y en este orden, todas las líneas de
+// Compras cuyo WITCUS no exista en la Maestra de Artículos.
+
+function descargarCodigoNuevo() {
+  if (!maestraLoaded) { alert('Todavía no se cargó la Maestra de Artículos, espera un momento e intenta de nuevo.'); return; }
+  const COLUMNS = ['RAZON SOCIAL DEL PROVEEDOR', 'DOCUMENTO DE COMPRAS', 'WINGDT', 'WITCUS', 'Descripción del material', 'EAN'];
+  const data = allData.filter(r => esCodigoNuevo(r.WITCUS));
+  if (!data.length) { alert('No hay líneas con Código Nuevo en este momento.'); return; }
+  const rows = data.map(r => {
+    const obj = {};
+    COLUMNS.forEach(col => { obj[col] = r[col] || ''; });
+    return obj;
+  });
+  const ws = XLSX.utils.json_to_sheet(rows, { header: COLUMNS });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Codigo Nuevo');
+  XLSX.writeFile(wb, 'codigo_nuevo.xls', { bookType: 'biff8' });
+}
+
+loadMaestraData(false);
 loadData(false);
 </script>
 </body></html>
