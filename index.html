@@ -605,9 +605,9 @@ let selectedObservaciones = new Set();
 /* ===================== FILTROS MULTI-SELECCIÓN CON BÚSQUEDA (reutilizable) ===================== */
 
 const FILTER_CONFIGS = [
-  { row: 'comprasFiltersRow',  key: 'comprasDocumento', label: 'Documento (DOCUMENTO DE COMPRAS)', onChange: () => renderTable() },
+  { row: 'comprasFiltersRow',  key: 'comprasDocumento', label: 'Documento (WDREF)', onChange: () => renderTable() },
   { row: 'comprasFiltersRow',  key: 'comprasProveedor', label: 'Proveedor', onChange: () => renderTable() },
-  { row: 'comprasFiltersRow',  key: 'comprasOC',        label: 'OC (WDREF)', onChange: () => renderTable() },
+  { row: 'comprasFiltersRow',  key: 'comprasOC',        label: 'OC (DOCUMENTO DE COMPRAS)', onChange: () => renderTable() },
   { row: 'comprasFiltersRow',  key: 'comprasCodigo',    label: 'Código (WITCUS)', onChange: () => renderTable() },
   { row: 'entradasFiltersRow', key: 'entradasDocumento', label: 'Documento', onChange: () => renderEntradasTable() },
   { row: 'entradasFiltersRow', key: 'entradasProveedor', label: 'Proveedor', onChange: () => renderEntradasTable() },
@@ -884,9 +884,9 @@ function limpiarFiltrosEntradas() {
 }
 
 function populateComprasFilters() {
-  initFilterMultiselect('comprasDocumento', uniqueValues(allData, 'DOCUMENTO DE COMPRAS'));
+  initFilterMultiselect('comprasDocumento', uniqueValues(allData, 'WDREF'));
   initFilterMultiselect('comprasProveedor', uniqueValues(allData, 'RAZON SOCIAL DEL PROVEEDOR'));
-  initFilterMultiselect('comprasOC', uniqueValues(allData, 'WDREF'));
+  initFilterMultiselect('comprasOC', uniqueValues(allData, 'DOCUMENTO DE COMPRAS'));
   initFilterMultiselect('comprasCodigo', uniqueValues(allData, 'WITCUS'));
 }
 
@@ -898,9 +898,9 @@ function filteredData() {
         .join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
-    if (!matchesFilter('comprasDocumento', r['DOCUMENTO DE COMPRAS'])) return false;
+    if (!matchesFilter('comprasDocumento', r.WDREF)) return false;
     if (!matchesFilter('comprasProveedor', r['RAZON SOCIAL DEL PROVEEDOR'])) return false;
-    if (!matchesFilter('comprasOC', r.WDREF)) return false;
+    if (!matchesFilter('comprasOC', r['DOCUMENTO DE COMPRAS'])) return false;
     if (!matchesFilter('comprasCodigo', r.WITCUS)) return false;
     if (activeChip === 'stock') return parseFloat(r.WQTY || 0) > 0;
     if (activeChip === 'vencen') {
@@ -1635,7 +1635,14 @@ function updateEntradasResumen(data) {
   let conformes = 0, malEstado = 0;
   data.forEach(r => {
     const qty = parseFloat(r.WQTY || 0) || 0;
-    if (isMalEstado(r.WNRANA)) malEstado += qty; else conformes += qty;
+    // El estatus real (CONFORME / MAL ESTADO) vive en la hoja de Compras (ESTATUS,
+    // columna AB), no en Entradas. Se cruza por WITCUS + WLTCUS (mismo código y lote).
+    const compraRow = allData.find(c =>
+      (c.WITCUS || '').trim() === (r.WITCUS || '').trim() &&
+      (c.WLTCUS || '').trim() === (r.WLTCUS || '').trim()
+    );
+    const estatus = compraRow ? compraRow.ESTATUS : '';
+    if (isConformeStatus(estatus)) conformes += qty; else malEstado += qty;
   });
 
   // Solicitado: se busca en la hoja de Compras (allData). El campo "Documento"
