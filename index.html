@@ -77,6 +77,12 @@
 </div>
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="comprasFiltersRow"></div>
+<div class="pt-gutter-xs">
+<button class="flex items-center gap-gutter-xs text-secondary hover:underline font-label-md text-label-md" onclick="limpiarFiltrosCompras()" type="button">
+<span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
+<span>Limpiar filtros</span>
+</button>
+</div>
 
 <div class="flex flex-wrap items-center gap-gutter-xs pt-gutter-xs border-t border-surface-container">
 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold mr-1">Plantilla de datos:</span>
@@ -292,6 +298,12 @@
 </div>
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="entradasFiltersRow"></div>
+<div class="pt-gutter-xs">
+<button class="flex items-center gap-gutter-xs text-secondary hover:underline font-label-md text-label-md" onclick="limpiarFiltrosEntradas()" type="button">
+<span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
+<span>Limpiar filtros</span>
+</button>
+</div>
 
 <div class="hidden grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="entradasResumenBar">
 <div class="p-3 bg-surface-container rounded-lg flex flex-col gap-0.5">
@@ -379,7 +391,7 @@
 </div>
 </div>
 <div class="flex items-center gap-gutter-xs shrink-0 flex-wrap">
-<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="loadEntradasData(true)" type="button">
+<button class="flex items-center gap-gutter-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm" onclick="loadData(true)" type="button">
 <span class="material-symbols-outlined text-[18px]">sync</span>
 <span>Sincronizar</span>
 </button>
@@ -391,6 +403,12 @@
 </div>
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-gutter-sm pt-gutter-xs" id="observacionesFiltersRow"></div>
+<div class="pt-gutter-xs">
+<button class="flex items-center gap-gutter-xs text-secondary hover:underline font-label-md text-label-md" onclick="limpiarFiltrosObservaciones()" type="button">
+<span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
+<span>Limpiar filtros</span>
+</button>
+</div>
 </div>
 
 <div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
@@ -406,26 +424,22 @@
 <thead>
 <tr class="bg-[#1E5622] text-white">
 <th class="py-3 px-3 font-table-header text-table-header text-center w-10" scope="col"><input class="w-4 h-4 accent-secondary-fixed cursor-pointer" id="observacionesSelectAll" onclick="toggleObservacionesSelectAll(this.checked)" type="checkbox"/></th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[110px]" scope="col">Usuario</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">Código</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[220px]" scope="col">Descripción</th>
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[180px]" scope="col">Proveedor</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[120px]" scope="col">OC</th>
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[140px]" scope="col">Documento</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[80px]" scope="col">Tipo</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[90px]" scope="col">WCUST</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WDREF</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[80px]" scope="col">WSEQ</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[80px]" scope="col">WTYPE</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WITCUS</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-right min-w-[80px]" scope="col">WQTY</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WLTCUS</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WEXPDT</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[100px]" scope="col">WNRANA</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WINGDT</th>
-<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WTHCMT</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">OC (WDREF)</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">Lote</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-right min-w-[90px]" scope="col">Ingresado</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[110px]" scope="col">Usuario</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[140px]" scope="col">Registro</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">Estatus Lote</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">Estatus</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[160px]" scope="col">Observaciones</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-surface-container" id="observacionesTableBody">
-<tr><td class="py-6 px-3.5 text-center text-outline" colspan="17">Cargando datos desde Google Sheets...</td></tr>
+<tr><td class="py-6 px-3.5 text-center text-outline" colspan="13">Cargando datos desde Google Sheets...</td></tr>
 </tbody>
 </table>
 </div>
@@ -803,8 +817,11 @@ function expiryStatus(str) {
 async function loadData(isManualSync) {
   const syncLabel = document.getElementById('syncLabel');
   const syncDot = document.getElementById('syncDot');
+  const obsSyncDot = document.getElementById('observacionesSyncDot');
+  const obsSyncTimeLabel = document.getElementById('observacionesSyncTimeLabel');
   syncLabel.innerText = 'Sincronizando...';
   syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-tertiary');
+  if (obsSyncDot) { obsSyncDot.classList.remove('bg-secondary', 'bg-error'); obsSyncDot.classList.add('bg-tertiary'); }
   try {
     const res = await fetch(CSV_URL + (isManualSync ? '&_=' + Date.now() : ''));
     const text = await res.text();
@@ -812,13 +829,20 @@ async function loadData(isManualSync) {
     allData = toObjects(rows);
     syncLabel.innerText = 'Online Sync';
     syncDot.classList.remove('bg-tertiary'); syncDot.classList.add('bg-secondary');
-    document.getElementById('syncTimeLabel').innerText = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+    const syncMsg = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('syncTimeLabel').innerText = syncMsg;
+    if (obsSyncDot) { obsSyncDot.classList.remove('bg-tertiary'); obsSyncDot.classList.add('bg-secondary'); }
+    if (obsSyncTimeLabel) obsSyncTimeLabel.innerText = syncMsg;
     populateComprasFilters();
     renderTable();
+    populateObservacionesFilters();
+    renderObservacionesTable();
     if (allData.length) selectRow(0);
   } catch (err) {
     syncLabel.innerText = 'Error de sincronización';
     syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-error');
+    if (obsSyncDot) { obsSyncDot.classList.remove('bg-secondary'); obsSyncDot.classList.add('bg-error'); }
+    if (obsSyncTimeLabel) obsSyncTimeLabel.innerText = 'Error de sincronización';
     document.getElementById('tableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="10">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
     console.error(err);
   }
@@ -834,6 +858,29 @@ function setChip(chip) {
   btn.classList.remove('bg-surface-container','text-on-surface-variant');
   btn.classList.add('bg-secondary-container','text-on-secondary-container','shadow-sm');
   renderTable();
+}
+
+function limpiarFiltrosCompras() {
+  ['comprasDocumento', 'comprasProveedor', 'comprasOC', 'comprasCodigo'].forEach(key => {
+    if (filterState[key]) {
+      filterState[key].selected.clear();
+      renderFilterOptions(key);
+      updateFilterLabel(key);
+    }
+  });
+  document.getElementById('skuFilterInput').value = '';
+  setChip('todos');
+}
+
+function limpiarFiltrosEntradas() {
+  ['entradasDocumento', 'entradasProveedor', 'entradasOC', 'entradasCodigo'].forEach(key => {
+    if (filterState[key]) {
+      filterState[key].selected.clear();
+      renderFilterOptions(key);
+      updateFilterLabel(key);
+    }
+  });
+  renderEntradasTable();
 }
 
 function populateComprasFilters() {
@@ -996,7 +1043,7 @@ const MAESTRA_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMljx9
 // ⚠️ Supuesto: el nombre de la columna en la Maestra que contiene el código
 // WITCUS. No confirmado — si "Código Nuevo" nunca detecta nada o detecta todo,
 // probablemente este nombre no coincide con el real; avísame el nombre exacto.
-const MAESTRA_CODIGO_FIELD = 'WITCUS';
+const MAESTRA_CODIGO_FIELD = 'CODIGO';
 
 let currentUser = null;
 let usuariosData = [];
@@ -1268,7 +1315,7 @@ function showModule(name) {
   document.getElementById('moduleUsuarios').classList.toggle('hidden', name !== 'usuarios');
   document.getElementById('moduleMaestra').classList.toggle('hidden', name !== 'maestra');
 
-  if ((name === 'entradas' || name === 'observaciones') && !entradasLoaded) {
+  if (name === 'entradas' && !entradasLoaded) {
     loadEntradasData(false);
   }
   if (name === 'usuarios' && !usuariosLoaded) {
@@ -1282,12 +1329,8 @@ function showModule(name) {
 async function loadEntradasData(isManualSync) {
   const syncDot = document.getElementById('entradasSyncDot');
   const syncTimeLabel = document.getElementById('entradasSyncTimeLabel');
-  const obsSyncDot = document.getElementById('observacionesSyncDot');
-  const obsSyncTimeLabel = document.getElementById('observacionesSyncTimeLabel');
   syncTimeLabel.innerText = 'Sincronizando...';
-  obsSyncTimeLabel.innerText = 'Sincronizando...';
   syncDot.classList.remove('bg-secondary', 'bg-error'); syncDot.classList.add('bg-tertiary');
-  obsSyncDot.classList.remove('bg-secondary', 'bg-error'); obsSyncDot.classList.add('bg-tertiary');
   try {
     const res = await fetch(ENTRADAS_CSV_URL + (isManualSync ? '&_=' + Date.now() : ''));
     const text = await res.text();
@@ -1295,21 +1338,14 @@ async function loadEntradasData(isManualSync) {
     entradasData = toObjects(rows);
     entradasLoaded = true;
     selectedEntradas.clear();
-    selectedObservaciones.clear();
     const syncMsg = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit'});
     syncDot.classList.remove('bg-tertiary'); syncDot.classList.add('bg-secondary');
-    obsSyncDot.classList.remove('bg-tertiary'); obsSyncDot.classList.add('bg-secondary');
     syncTimeLabel.innerText = syncMsg;
-    obsSyncTimeLabel.innerText = syncMsg;
     populateEntradasFilters();
     renderEntradasTable();
-    populateObservacionesFilters();
-    renderObservacionesTable();
   } catch (err) {
     syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-error');
-    obsSyncDot.classList.remove('bg-secondary'); obsSyncDot.classList.add('bg-error');
     syncTimeLabel.innerText = 'Error de sincronización';
-    obsSyncTimeLabel.innerText = 'Error de sincronización';
     document.getElementById('entradasTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="18">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
     document.getElementById('observacionesTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="17">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
     console.error(err);
@@ -1480,56 +1516,74 @@ function isConformeStatus(wnrana) {
 }
 
 /* ===================== MÓDULO: OBSERVACIONES (líneas no conformes) ===================== */
-// Misma fuente de datos que "Registro de Entradas y Recepción" (entradasData), pero
-// solo muestra las líneas cuyo estatus (WNRANA) no sea conforme.
+// Fuente de datos: allData (la misma hoja de Compras/DATA), filtrando por su
+// columna real ESTATUS (columna AB). Se considera "conforme" cuando ESTATUS
+// viene vacío o dice "CONFORME"; cualquier otro texto (ej. "MAL ESTADO") es
+// una observación.
+
+const OBSERVACIONES_COLUMNS = ['USUARIO', 'REGISTRO', 'ESTATUS LOTE', 'ESTATUS', 'OBSERVACIONES'];
 
 function populateObservacionesFilters() {
-  initFilterMultiselect('observacionesDocumento', uniqueValues(entradasData, 'DOCUMENTO'));
-  initFilterMultiselect('observacionesProveedor', uniqueValues(entradasData, 'PROVEEDOR'));
-  initFilterMultiselect('observacionesOC', uniqueValues(entradasData, 'OC'));
-  initFilterMultiselect('observacionesCodigo', uniqueValues(entradasData, 'WITCUS'));
+  initFilterMultiselect('observacionesDocumento', uniqueValues(allData, 'WDREF'));
+  initFilterMultiselect('observacionesProveedor', uniqueValues(allData, 'RAZON SOCIAL DEL PROVEEDOR'));
+  initFilterMultiselect('observacionesOC', uniqueValues(allData, 'DOCUMENTO DE COMPRAS'));
+  initFilterMultiselect('observacionesCodigo', uniqueValues(allData, 'WITCUS'));
 }
 
 function filteredObservaciones() {
-  return entradasData.filter(r => {
-    if (isConformeStatus(r.WNRANA)) return false;
-    if (!matchesFilter('observacionesDocumento', r.DOCUMENTO)) return false;
-    if (!matchesFilter('observacionesProveedor', r.PROVEEDOR)) return false;
-    if (!matchesFilter('observacionesOC', r.OC)) return false;
+  return allData.filter(r => {
+    if (isConformeStatus(r.ESTATUS)) return false;
+    if (!matchesFilter('observacionesDocumento', r.WDREF)) return false;
+    if (!matchesFilter('observacionesProveedor', r['RAZON SOCIAL DEL PROVEEDOR'])) return false;
+    if (!matchesFilter('observacionesOC', r['DOCUMENTO DE COMPRAS'])) return false;
     if (!matchesFilter('observacionesCodigo', r.WITCUS)) return false;
     return true;
   });
 }
 
+function limpiarFiltrosObservaciones() {
+  ['observacionesDocumento', 'observacionesProveedor', 'observacionesOC', 'observacionesCodigo'].forEach(key => {
+    if (filterState[key]) {
+      filterState[key].selected.clear();
+      renderFilterOptions(key);
+      updateFilterLabel(key);
+    }
+  });
+  renderObservacionesTable();
+}
+
 function renderObservacionesTable() {
   const data = filteredObservaciones();
   const tbody = document.getElementById('observacionesTableBody');
-  const totalNoConformes = entradasData.filter(r => !isConformeStatus(r.WNRANA)).length;
+  const totalNoConformes = allData.filter(r => !isConformeStatus(r.ESTATUS)).length;
   document.getElementById('observacionesCountLabel').innerText = `${totalNoConformes} líneas no conformes`;
   document.getElementById('observacionesMatchCountLabel').innerText = `${data.length} Coincidencias`;
   document.getElementById('observacionesFooterCountLabel').innerText = `Mostrando ${data.length} de ${totalNoConformes} registros`;
 
-  const colCount = ENTRADAS_COLUMNS.length + 1;
   if (!data.length) {
-    tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-outline" colspan="${colCount}">Sin líneas con observación para este filtro.</td></tr>`;
+    tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-outline" colspan="13">Sin líneas con observación para este filtro.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = data.map((r) => {
-    const realIdx = entradasData.indexOf(r);
-    const cells = ENTRADAS_COLUMNS.map(col => {
-      let val = r[col.key] || '';
-      if (ENTRADAS_DATE_KEYS.includes(col.key)) val = formatDate(val);
-      const align = (col.key === 'WQTY') ? 'text-right' : (['TIPO','WCUST','WSEQ','WTYPE','WLTCUS','WEXPDT','WNRANA','WINGDT'].includes(col.key) ? 'text-center' : 'text-left');
-      const highlight = (col.key === 'WNRANA') ? 'text-error font-semibold' : '';
-      return `<td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface ${align} ${highlight}">${val || '—'}</td>`;
-    }).join('');
+    const realIdx = allData.indexOf(r);
     return `
     <tr class="hover:bg-surface-container-low transition-colors">
       <td class="py-2.5 px-3 text-center">
         <input class="w-4 h-4 accent-secondary cursor-pointer" data-idx="${realIdx}" onclick="toggleObservacionesSelect(${realIdx}, this.checked)" type="checkbox" ${selectedObservaciones.has(realIdx) ? 'checked' : ''}/>
       </td>
-      ${cells}
+      <td class="py-2.5 px-3.5 font-data-mono text-data-mono text-on-surface">${r.WITCUS || '—'}</td>
+      <td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface">${r['Descripción del material'] || '—'}</td>
+      <td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface">${r['RAZON SOCIAL DEL PROVEEDOR'] || '—'}</td>
+      <td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface">${r['DOCUMENTO DE COMPRAS'] || '—'}</td>
+      <td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface">${r.WDREF || '—'}</td>
+      <td class="py-2.5 px-3.5 text-center font-data-mono text-data-mono text-on-surface">${r.WLTCUS || '—'}</td>
+      <td class="py-2.5 px-3.5 text-right font-data-mono text-data-mono text-on-surface">${(r.INGRESO !== undefined && r.INGRESO !== '') ? r.INGRESO : '—'}</td>
+      <td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface">${r.USUARIO || '—'}</td>
+      <td class="py-2.5 px-3.5 text-center font-table-cell text-table-cell text-on-surface">${r.REGISTRO || '—'}</td>
+      <td class="py-2.5 px-3.5 text-center font-table-cell text-table-cell text-on-surface">${r['ESTATUS LOTE'] || '—'}</td>
+      <td class="py-2.5 px-3.5 text-center font-table-cell text-table-cell text-error font-semibold">${r.ESTATUS || '—'}</td>
+      <td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface">${r.OBSERVACIONES || '—'}</td>
     </tr>`;
   }).join('');
 }
@@ -1537,7 +1591,7 @@ function renderObservacionesTable() {
 function toggleObservacionesSelectAll(checked) {
   const data = filteredObservaciones();
   data.forEach(r => {
-    const idx = entradasData.indexOf(r);
+    const idx = allData.indexOf(r);
     if (checked) selectedObservaciones.add(idx); else selectedObservaciones.delete(idx);
   });
   renderObservacionesTable();
@@ -1548,19 +1602,20 @@ function toggleObservacionesSelect(idx, checked) {
   const allBox = document.getElementById('observacionesSelectAll');
   if (allBox) {
     const data = filteredObservaciones();
-    allBox.checked = data.length > 0 && data.every(r => selectedObservaciones.has(entradasData.indexOf(r)));
+    allBox.checked = data.length > 0 && data.every(r => selectedObservaciones.has(allData.indexOf(r)));
   }
 }
 
 function exportObservacionesXLS() {
   const base = filteredObservaciones();
   const data = selectedObservaciones.size
-    ? base.filter(r => selectedObservaciones.has(entradasData.indexOf(r)))
+    ? base.filter(r => selectedObservaciones.has(allData.indexOf(r)))
     : base;
   if (!data.length) return;
+  const COLS = ['WITCUS', 'Descripción del material', 'RAZON SOCIAL DEL PROVEEDOR', 'DOCUMENTO DE COMPRAS', 'WDREF', 'WLTCUS', 'INGRESO', 'USUARIO', 'REGISTRO', 'ESTATUS LOTE', 'ESTATUS', 'OBSERVACIONES'];
   const rows = data.map(r => {
     const obj = {};
-    ENTRADAS_COLUMNS.forEach(col => { obj[col.label] = r[col.key] || ''; });
+    COLS.forEach(c => { obj[c] = r[c] || ''; });
     return obj;
   });
   const ws = XLSX.utils.json_to_sheet(rows);
