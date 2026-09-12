@@ -786,12 +786,34 @@ function toObjects(rows) {
 function parseDate(str) {
   if (!str) return null;
   str = str.toString().trim();
-  if (/^\d{8}$/.test(str)) {
-    return new Date(+str.substring(0,4), +str.substring(4,6) - 1, +str.substring(6,8));
+
+  // DD/MM/YYYY, DD.MM.YYYY, DD-MM-YYYY (día primero, con separador)
+  let m = str.match(/^(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})$/);
+  if (m) {
+    const d = +m[1], mo = +m[2], y = +m[3];
+    if (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) return new Date(y, mo - 1, d);
   }
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    const [y,m,d] = str.split('-').map(Number);
-    return new Date(y, m - 1, d);
+
+  // YYYY/MM/DD, YYYY-MM-DD, YYYY.MM.DD (año primero, con separador)
+  m = str.match(/^(\d{4})[\/\.\-](\d{1,2})[\/\.\-](\d{1,2})$/);
+  if (m) {
+    const y = +m[1], mo = +m[2], d = +m[3];
+    if (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) return new Date(y, mo - 1, d);
+  }
+
+  if (/^\d{8}$/.test(str)) {
+    // Algunas filas (cargadas por plantilla) traen la fecha en DDMMYYYY en vez
+    // de YYYYMMDD como el resto de la hoja. Se prueba primero YYYYMMDD; si el
+    // año/mes/día no son plausibles, se reintenta como DDMMYYYY.
+    const y1 = +str.substring(0,4), m1 = +str.substring(4,6), d1 = +str.substring(6,8);
+    const esValidoYMD = y1 >= 1990 && y1 <= 2100 && m1 >= 1 && m1 <= 12 && d1 >= 1 && d1 <= 31;
+    if (esValidoYMD) return new Date(y1, m1 - 1, d1);
+
+    const d2 = +str.substring(0,2), m2 = +str.substring(2,4), y2 = +str.substring(4,8);
+    const esValidoDMY = y2 >= 1990 && y2 <= 2100 && m2 >= 1 && m2 <= 12 && d2 >= 1 && d2 <= 31;
+    if (esValidoDMY) return new Date(y2, m2 - 1, d2);
+
+    return null;
   }
   // Fecha serial de Excel/Google Sheets (ej. 47119 → 26/02/2029). Pasa cuando
   // una plantilla subida trae la columna de fecha con formato nativo de fecha
@@ -1291,9 +1313,45 @@ function normalizarFechaPlantilla(val) {
   if (typeof val === 'number' && val > 20000 && val < 90000) {
     return excelSerialAYYYYMMDD(val);
   }
-  if (typeof val === 'string' && /^\d{4,6}$/.test(val.trim())) {
-    const n = Number(val.trim());
+  const strVal = (val || '').toString().trim();
+  if (!strVal) return val;
+
+  // DD/MM/YYYY, DD.MM.YYYY, DD-MM-YYYY (día primero, con separador)
+  let m = strVal.match(/^(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})$/);
+  if (m) {
+    const d = m[1].padStart(2, '0'), mo = m[2].padStart(2, '0'), y = m[3];
+    if (+mo >= 1 && +mo <= 12 && +d >= 1 && +d <= 31) return `${y}${mo}${d}`;
+  }
+
+  // YYYY/MM/DD, YYYY-MM-DD, YYYY.MM.DD (año primero, con separador)
+  m = strVal.match(/^(\d{4})[\/\.\-](\d{1,2})[\/\.\-](\d{1,2})$/);
+  if (m) {
+    const y = m[1], mo = m[2].padStart(2, '0'), d = m[3].padStart(2, '0');
+    if (+mo >= 1 && +mo <= 12 && +d >= 1 && +d <= 31) return `${y}${mo}${d}`;
+  }
+
+  if (/^\d{8}$/.test(strVal)) {
+    const y1 = +strVal.substring(0,4), m1 = +strVal.substring(4,6), d1 = +strVal.substring(6,8);
+    const esValidoYMD = y1 >= 1990 && y1 <= 2100 && m1 >= 1 && m1 <= 12 && d1 >= 1 && d1 <= 31;
+    if (esValidoYMD) return strVal; // ya viene en YYYYMMDD correcto
+    // Probar como DDMMYYYY y convertir a YYYYMMDD para guardar consistente
+    const d2 = strVal.substring(0,2), m2 = strVal.substring(2,4), y2 = strVal.substring(4,8);
+    const d2n = +d2, m2n = +m2, y2n = +y2;
+    const esValidoDMY = y2n >= 1990 && y2n <= 2100 && m2n >= 1 && m2n <= 12 && d2n >= 1 && d2n <= 31;
+    if (esValidoDMY) return `${y2}${m2}${d2}`;
+    return strVal;
+  }
+  if (/^\d{4,6}$/.test(strVal)) {
+    const n = Number(strVal);
     if (n > 20000 && n < 90000) return excelSerialAYYYYMMDD(n);
+  }
+  // Último recurso: dejar que el navegador intente interpretarla
+  const dNative = new Date(strVal);
+  if (!isNaN(dNative)) {
+    const y = dNative.getFullYear();
+    const mo = String(dNative.getMonth() + 1).padStart(2, '0');
+    const d = String(dNative.getDate()).padStart(2, '0');
+    return `${y}${mo}${d}`;
   }
   return val;
 }
