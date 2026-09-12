@@ -785,13 +785,24 @@ function toObjects(rows) {
 
 function parseDate(str) {
   if (!str) return null;
-  str = str.trim();
+  str = str.toString().trim();
   if (/^\d{8}$/.test(str)) {
     return new Date(+str.substring(0,4), +str.substring(4,6) - 1, +str.substring(6,8));
   }
   if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
     const [y,m,d] = str.split('-').map(Number);
     return new Date(y, m - 1, d);
+  }
+  // Fecha serial de Excel/Google Sheets (ej. 47119 → 26/02/2029). Pasa cuando
+  // una plantilla subida trae la columna de fecha con formato nativo de fecha
+  // de Excel en vez de texto plano YYYYMMDD.
+  if (/^\d{4,6}$/.test(str)) {
+    const n = Number(str);
+    if (n > 20000 && n < 90000) {
+      const epochMs = Date.UTC(1899, 11, 30);
+      const d = new Date(epochMs + n * 86400000);
+      return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    }
   }
   const d = new Date(str);
   return isNaN(d) ? null : d;
@@ -1261,6 +1272,32 @@ function confirmarSubirPlantilla() {
 // Sube la plantilla en modo "agregar": las filas del archivo se suman al final
 // de la hoja DATA (no se borra lo existente), y el ID_DATA correlativo lo
 // calcula el Apps Script en base al mayor ID_DATA ya presente en la hoja.
+function excelSerialAYYYYMMDD(n) {
+  const epochMs = Date.UTC(1899, 11, 30);
+  const d = new Date(epochMs + n * 86400000);
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${y}${m}${day}`;
+}
+
+function normalizarFechaPlantilla(val) {
+  if (val instanceof Date) {
+    const y = val.getFullYear();
+    const m = String(val.getMonth() + 1).padStart(2, '0');
+    const d = String(val.getDate()).padStart(2, '0');
+    return `${y}${m}${d}`;
+  }
+  if (typeof val === 'number' && val > 20000 && val < 90000) {
+    return excelSerialAYYYYMMDD(val);
+  }
+  if (typeof val === 'string' && /^\d{4,6}$/.test(val.trim())) {
+    const n = Number(val.trim());
+    if (n > 20000 && n < 90000) return excelSerialAYYYYMMDD(n);
+  }
+  return val;
+}
+
 function subirPlantilla(file) {
   if (!file) return;
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('REEMPLAZA_CON') === 0) {
@@ -1277,6 +1314,18 @@ function subirPlantilla(file) {
       const firstSheet = wb.Sheets[wb.SheetNames[0]];
       const filas = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
       if (!filas.length) { setPlantillaModalStatus('El archivo no tiene filas de datos.', true); btn.disabled = false; return; }
+
+      // Si Excel formateó WEXPDT/WINGDT como fecha nativa, sheet_to_json devuelve
+      // el número serial (ej. 47119) en vez de texto YYYYMMDD. Se normaliza aquí
+      // para que la hoja de Google Sheets siempre guarde el formato correcto.
+      const CAMPOS_FECHA_PLANTILLA = ['WEXPDT', 'WINGDT'];
+      filas.forEach(fila => {
+        CAMPOS_FECHA_PLANTILLA.forEach(campo => {
+          if (fila[campo] !== undefined && fila[campo] !== '') {
+            fila[campo] = normalizarFechaPlantilla(fila[campo]);
+          }
+        });
+      });
 
       setPlantillaModalStatus(`Subiendo ${filas.length} filas...`, false);
       const res = await fetch(APPS_SCRIPT_URL, {
