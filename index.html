@@ -354,11 +354,12 @@
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[100px]" scope="col">WNRANA</th>
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[110px]" scope="col">WINGDT</th>
 <th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-left min-w-[130px]" scope="col">WTHCMT</th>
+<th class="py-3 px-3.5 font-table-header text-table-header uppercase tracking-wider text-center min-w-[120px]" scope="col">Estatus</th>
 <th class="py-3 px-3 font-table-header text-table-header uppercase tracking-wider text-center w-20" scope="col">Acciones</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-surface-container" id="entradasTableBody">
-<tr><td class="py-6 px-3.5 text-center text-outline" colspan="18">Cargando datos desde Google Sheets...</td></tr>
+<tr><td class="py-6 px-3.5 text-center text-outline" colspan="19">Cargando datos desde Google Sheets...</td></tr>
 </tbody>
 </table>
 </div>
@@ -600,6 +601,11 @@ let selectedCompras = new Set();
 let entradasData = [];
 let entradasLoaded = false;
 let selectedEntradas = new Set();
+// Ediciones/eliminaciones ya confirmadas por el Apps Script pero que el CSV publicado de Google
+// (que se refresca con unos minutos de retraso) todavía puede no reflejar. Se re-aplican al
+// sincronizar para que el cambio no "desaparezca" en pantalla.
+const entradasPendientes = { qty: {}, del: {} };
+const ENTRADAS_PENDIENTE_TTL_MS = 10 * 60 * 1000;
 let selectedObservaciones = new Set();
 
 /* ===================== FILTROS MULTI-SELECCIÓN CON BÚSQUEDA (reutilizable) ===================== */
@@ -1443,6 +1449,7 @@ async function loadEntradasData(isManualSync) {
     const text = await res.text();
     const rows = parseCSV(text);
     entradasData = toObjects(rows);
+    aplicarPendientesEntradas();
     entradasLoaded = true;
     selectedEntradas.clear();
     const syncMsg = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit'});
@@ -1453,7 +1460,7 @@ async function loadEntradasData(isManualSync) {
   } catch (err) {
     syncDot.classList.remove('bg-secondary'); syncDot.classList.add('bg-error');
     syncTimeLabel.innerText = 'Error de sincronización';
-    document.getElementById('entradasTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="18">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
+    document.getElementById('entradasTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="19">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
     document.getElementById('observacionesTableBody').innerHTML = `<tr><td class="py-6 px-3.5 text-center text-error" colspan="17">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
     console.error(err);
   }
@@ -1476,6 +1483,80 @@ function filteredEntradas() {
   });
 }
 
+/* ===================== ESTATUS POR LÍNEA DE ENTRADA / ID MOV / POST A APPS SCRIPT ===================== */
+
+const normTxt = (v) => (v || '').toString().replace(/\s+/g, '').toUpperCase();
+
+// Índice de Compras (allData) para cruzar cada línea de Entradas. Se reconstruye solo
+// cuando allData cambia (después de sincronizar).
+let _compraIdxRef = null, _compraIdx = null;
+function getCompraIndex() {
+  if (_compraIdxRef === allData && _compraIdx) return _compraIdx;
+  const full = new Map(), code = new Map();
+  allData.forEach(c => {
+    const kCode = normTxt(c.WITCUS) + '|' + normTxt(c.WLTCUS);
+    const kFull = normTxt(c.WDREF) + '|' + kCode;
+    if (!full.has(kFull)) full.set(kFull, c);
+    if (!code.has(kCode)) code.set(kCode, c);
+  });
+  _compraIdxRef = allData; _compraIdx = { full, code };
+  return _compraIdx;
+}
+
+function compraDeEntrada(r) {
+  const idx = getCompraIndex();
+  const kCode = normTxt(r.WITCUS) + '|' + normTxt(r.WLTCUS);
+  const doc = r.WDREF || r.DOCUMENTO;
+  return idx.full.get(normTxt(doc) + '|' + kCode) || idx.code.get(kCode) || null;
+}
+
+// Estatus de una línea de Entradas:
+//  1) si la propia hoja Entradas trae la columna ESTATUS con dato, se usa ese;
+//  2) si viene vacía, se toma el ESTATUS de la línea de Compras (Documento + Código + Lote).
+function estatusEntrada(r) {
+  const k = Object.keys(r).find(x => x.trim().toUpperCase() === 'ESTATUS');
+  const propio = k ? (r[k] || '').toString().trim() : '';
+  if (propio) return propio;
+  const c = compraDeEntrada(r);
+  return c ? (c.ESTATUS || '').toString().trim() : '';
+}
+
+// Tolera que la cabecera se llame "ID MOV", "ID_MOV", "IDMOV", etc.
+function getIdMov(r) {
+  const k = Object.keys(r).find(x => x.replace(/[\s_]+/g, '').toUpperCase() === 'IDMOV');
+  return k ? (r[k] || '').toString().trim() : '';
+}
+
+function aplicarPendientesEntradas() {
+  const now = Date.now();
+  const vigente = (ts) => now - ts <= ENTRADAS_PENDIENTE_TTL_MS;
+  Object.keys(entradasPendientes.del).forEach(id => { if (!vigente(entradasPendientes.del[id])) delete entradasPendientes.del[id]; });
+  Object.keys(entradasPendientes.qty).forEach(id => { if (!vigente(entradasPendientes.qty[id].ts)) delete entradasPendientes.qty[id]; });
+  entradasData = entradasData.filter(r => !(getIdMov(r) in entradasPendientes.del));
+  entradasData.forEach(r => {
+    const p = entradasPendientes.qty[getIdMov(r)];
+    if (!p) return;
+    if (parseInt(r.WQTY, 10) === p.valor) delete entradasPendientes.qty[getIdMov(r)]; // el CSV ya se actualizó
+    else r.WQTY = String(p.valor);
+  });
+}
+
+async function postAppsScript(payload) {
+  const res = await fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  });
+  const text = await res.text();
+  let data;
+  try { data = JSON.parse(text); }
+  catch (e) {
+    throw new Error('El Apps Script no respondió en formato JSON. Revisa que la acción "' + payload.action + '" exista en la versión publicada.');
+  }
+  if (!data.ok) throw new Error(data.error || 'Error desconocido');
+  return data;
+}
+
 function renderEntradasTable() {
   const data = filteredEntradas();
   const tbody = document.getElementById('entradasTableBody');
@@ -1484,7 +1565,7 @@ function renderEntradasTable() {
   document.getElementById('entradasFooterCountLabel').innerText = `Mostrando ${data.length} de ${entradasData.length} registros`;
   updateEntradasResumen(data);
 
-  const colCount = ENTRADAS_COLUMNS.length + 2;
+  const colCount = ENTRADAS_COLUMNS.length + 3;
   if (!data.length) {
     tbody.innerHTML = `<tr><td class="py-6 px-3.5 text-center text-outline" colspan="${colCount}">Sin resultados para este filtro.</td></tr>`;
     return;
@@ -1498,12 +1579,17 @@ function renderEntradasTable() {
       const align = (col.key === 'WQTY') ? 'text-right' : (['TIPO','WCUST','WSEQ','WTYPE','WLTCUS','WEXPDT','WNRANA','WINGDT'].includes(col.key) ? 'text-center' : 'text-left');
       return `<td class="py-2.5 px-3.5 font-table-cell text-table-cell text-on-surface ${align}">${val || '—'}</td>`;
     }).join('');
+    const est = estatusEntrada(r);
+    const okEst = isConformeStatus(est);
+    const estCls = okEst ? 'bg-secondary-container text-on-secondary-container' : 'bg-error-container text-on-error-container';
+    const estCell = `<td class="py-2.5 px-3.5 text-center"><span class="inline-block px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold uppercase ${estCls}">${escapeHtml(est || 'CONFORME')}</span></td>`;
     return `
     <tr class="hover:bg-surface-container-low transition-colors">
       <td class="py-2.5 px-3 text-center">
         <input class="w-4 h-4 accent-secondary cursor-pointer" data-idx="${realIdx}" onclick="toggleEntradasSelect(${realIdx}, this.checked)" type="checkbox" ${selectedEntradas.has(realIdx) ? 'checked' : ''}/>
       </td>
       ${cells}
+      ${estCell}
       <td class="py-2.5 px-3 text-center whitespace-nowrap">
         <button class="p-1 text-outline hover:text-secondary rounded transition-colors" onclick="editarCantidadEntrada(${realIdx})" title="Editar cantidad (WQTY)" type="button">
           <span class="material-symbols-outlined text-[18px]">edit</span>
@@ -1539,8 +1625,8 @@ function toggleEntradasSelect(idx, checked) {
 async function editarCantidadEntrada(idx) {
   const r = entradasData[idx];
   if (!r) return;
-  const idMov = r['ID MOV'];
-  if (!idMov) { alert('Este registro no tiene ID MOV, no se puede editar.'); return; }
+  const idMov = getIdMov(r);
+  if (!idMov) { alert('Este registro no tiene ID MOV en la hoja de Entradas (o la columna no se llama "ID MOV"), no se puede editar.'); return; }
   const actual = r.WQTY || 0;
   const input = prompt('Nueva cantidad (WQTY):', actual);
   if (input === null) return;
@@ -1549,14 +1635,9 @@ async function editarCantidadEntrada(idx) {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('REEMPLAZA_CON') === 0) { alert('Falta configurar la URL de Apps Script.'); return; }
 
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'editarEntradaQty', idMov, nuevaCantidad })
-    });
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Error desconocido');
-    r.WQTY = nuevaCantidad;
+    await postAppsScript({ action: 'editarEntradaQty', idMov, nuevaCantidad });
+    entradasPendientes.qty[idMov] = { valor: nuevaCantidad, ts: Date.now() };
+    r.WQTY = nuevaCantidad;   // se actualiza en pantalla al instante (el CSV publicado de Google puede tardar unos minutos)
     renderEntradasTable();
   } catch (err) {
     console.error(err);
@@ -1567,21 +1648,18 @@ async function editarCantidadEntrada(idx) {
 async function eliminarLineaEntrada(idx) {
   const r = entradasData[idx];
   if (!r) return;
-  const idMov = r['ID MOV'];
-  if (!idMov) { alert('Este registro no tiene ID MOV, no se puede eliminar.'); return; }
+  const idMov = getIdMov(r);
+  if (!idMov) { alert('Este registro no tiene ID MOV en la hoja de Entradas (o la columna no se llama "ID MOV"), no se puede eliminar.'); return; }
   if (!confirm('¿Eliminar esta línea de la hoja de Entradas? Esta acción no se puede deshacer.')) return;
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('REEMPLAZA_CON') === 0) { alert('Falta configurar la URL de Apps Script.'); return; }
 
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'eliminarEntrada', idMov })
-    });
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Error desconocido');
+    await postAppsScript({ action: 'eliminarEntrada', idMov });
     selectedEntradas.clear();
-    loadEntradasData(true);
+    entradasPendientes.del[idMov] = Date.now();
+    entradasData.splice(idx, 1);   // se quita de pantalla al instante (evita que el CSV publicado, aún en caché, la vuelva a mostrar)
+    populateEntradasFilters();
+    renderEntradasTable();
   } catch (err) {
     console.error(err);
     alert('Error al eliminar: ' + err.message);
@@ -1742,14 +1820,9 @@ function updateEntradasResumen(data) {
   let conformes = 0, malEstado = 0;
   data.forEach(r => {
     const qty = parseFloat(r.WQTY || 0) || 0;
-    // El estatus real (CONFORME / MAL ESTADO) vive en la hoja de Compras (ESTATUS,
-    // columna AB), no en Entradas. Se cruza por WITCUS + WLTCUS (mismo código y lote).
-    const compraRow = allData.find(c =>
-      (c.WITCUS || '').trim() === (r.WITCUS || '').trim() &&
-      (c.WLTCUS || '').trim() === (r.WLTCUS || '').trim()
-    );
-    const estatus = compraRow ? compraRow.ESTATUS : '';
-    if (isConformeStatus(estatus)) conformes += qty; else malEstado += qty;
+    // Estatus por línea: primero el ESTATUS de la hoja Entradas; si viene vacío, el de
+    // Compras (cruce por Documento + Código + Lote). Ver estatusEntrada().
+    if (isConformeStatus(estatusEntrada(r))) conformes += qty; else malEstado += qty;
   });
 
   // Solicitado: se busca en la hoja de Compras (allData). El campo "Documento"
@@ -1780,14 +1853,20 @@ function updateEntradasResumen(data) {
 // Descarga la información seleccionada/filtrada de Entradas respetando exactamente
 // las cabeceras de la hoja física (WCUST, WDREF, WSEQ, WTYPE, WITCUS, WQTY, WLTCUS,
 // WEXPDT, WNRANA, WINGDT, WTHCMT), asigna el correlativo WSEQ por Documento, y marca
-// WNRANA como "CONFORME" cuando viene vacío. Archivo y hoja se llaman "INGPRVW".
+// WNRANA vacío. Solo incluye las líneas con estatus CONFORME. Archivo y hoja se llaman "INGPRVW".
 
 function generarINGPRVW() {
+  if (!allData.length) { alert('Aún no se cargó la hoja de Compras (necesaria para validar el estatus). Espera unos segundos y vuelve a intentar.'); return; }
   const base = filteredEntradas();
-  const data = selectedEntradas.size
+  const seleccion = selectedEntradas.size
     ? base.filter(r => selectedEntradas.has(entradasData.indexOf(r)))
     : base;
-  if (!data.length) return;
+  if (!seleccion.length) return;
+
+  // Solo se descargan las líneas con estatus CONFORME (o sin estatus, que se trata como conforme).
+  const data = seleccion.filter(r => isConformeStatus(estatusEntrada(r)));
+  const excluidas = seleccion.length - data.length;
+  if (!data.length) { alert('Ninguna de las ' + seleccion.length + ' líneas tiene estatus CONFORME, no hay nada que descargar.'); return; }
 
   const INGPRVW_COLUMNS = ['WCUST', 'WDREF', 'WSEQ', 'WTYPE', 'WITCUS', 'WQTY', 'WLTCUS', 'WEXPDT', 'WNRANA', 'WINGDT', 'WTHCMT'];
   // Numéricas sin decimales: se exportan como número real (no texto) para que
@@ -1817,6 +1896,7 @@ function generarINGPRVW() {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'INGPRVW');
   XLSX.writeFile(wb, 'INGPRVW.xls', { bookType: 'biff8' });
+  if (excluidas > 0) alert('INGPRVW descargado con ' + data.length + ' líneas conformes. Se excluyeron ' + excluidas + ' línea(s) con otro estatus (ej. MAL ESTADO).');
 }
 
 /* ===================== MÓDULO: REGISTRO DE USUARIO ===================== */
