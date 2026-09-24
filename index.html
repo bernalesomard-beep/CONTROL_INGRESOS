@@ -1766,12 +1766,13 @@ function isMalEstado(wnrana) {
   return /mal/i.test((wnrana || '').toString());
 }
 
-// Una línea se considera "conforme" si WNRANA viene vacío o dice explícitamente
-// "CONFORME". Cualquier otro texto (MAL ESTADO, FALTANTE, etc.) se considera una
-// observación y por eso aparece en la sección "Observaciones".
+// Una línea se considera "conforme" si el estatus viene vacío o dice explícitamente
+// "CONFORME" o "NUEVO" (NUEVO se trata igual que CONFORME). Cualquier otro texto
+// (MAL ESTADO, FALTANTE, etc.) se considera una observación y por eso aparece en
+// la sección "Observaciones".
 function isConformeStatus(wnrana) {
   const val = (wnrana || '').toString().trim();
-  return val === '' || /conforme/i.test(val);
+  return val === '' || /conforme|nuevo/i.test(val);
 }
 
 /* ===================== MÓDULO: OBSERVACIONES (líneas no conformes) ===================== */
@@ -1927,7 +1928,7 @@ function updateEntradasResumen(data) {
 // Descarga la información seleccionada/filtrada de Entradas respetando exactamente
 // las cabeceras de la hoja física (WCUST, WDREF, WSEQ, WTYPE, WITCUS, WQTY, WLTCUS,
 // WEXPDT, WNRANA, WINGDT, WTHCMT), asigna el correlativo WSEQ por Documento, y marca
-// WNRANA vacío. Solo incluye las líneas con estatus CONFORME. Archivo y hoja se llaman "INGPRVW".
+// WNRANA vacío. Solo incluye las líneas con estatus CONFORME o NUEVO. Archivo y hoja se llaman "INGPRVW".
 
 function generarINGPRVW() {
   if (!allData.length) { alert('Aún no se cargó la hoja de Compras (necesaria para validar el estatus). Espera unos segundos y vuelve a intentar.'); return; }
@@ -1937,10 +1938,10 @@ function generarINGPRVW() {
     : base;
   if (!seleccion.length) return;
 
-  // Solo se descargan las líneas con estatus CONFORME (o sin estatus, que se trata como conforme).
+  // Solo se descargan las líneas con estatus CONFORME o NUEVO (o sin estatus, que se trata como conforme).
   const data = seleccion.filter(r => isConformeStatus(estatusEntrada(r)));
   const excluidas = seleccion.length - data.length;
-  if (!data.length) { alert('Ninguna de las ' + seleccion.length + ' líneas tiene estatus CONFORME, no hay nada que descargar.'); return; }
+  if (!data.length) { alert('Ninguna de las ' + seleccion.length + ' líneas tiene estatus CONFORME o NUEVO, no hay nada que descargar.'); return; }
 
   const INGPRVW_COLUMNS = ['WCUST', 'WDREF', 'WSEQ', 'WTYPE', 'WITCUS', 'WQTY', 'WLTCUS', 'WEXPDT', 'WNRANA', 'WINGDT', 'WTHCMT'];
   // Numéricas sin decimales: se exportan como número real (no texto) para que
@@ -1970,7 +1971,7 @@ function generarINGPRVW() {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'INGPRVW');
   XLSX.writeFile(wb, 'INGPRVW.xls', { bookType: 'biff8' });
-  if (excluidas > 0) alert('INGPRVW descargado con ' + data.length + ' líneas conformes. Se excluyeron ' + excluidas + ' línea(s) con otro estatus (ej. MAL ESTADO).');
+  if (excluidas > 0) alert('INGPRVW descargado con ' + data.length + ' líneas (CONFORME/NUEVO). Se excluyeron ' + excluidas + ' línea(s) con otro estatus (ej. MAL ESTADO).');
 }
 
 /* ===================== MÓDULO: REGISTRO DE USUARIO ===================== */
