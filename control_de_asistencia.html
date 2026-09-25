@@ -1,0 +1,863 @@
+<!DOCTYPE html><html lang="es" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-primary-fixed-variant": "#264191", "on-tertiary": "#ffffff", "surface-container": "#e5eeff", "surface-dim": "#cbdbf5", "primary-container": "#1e3a8a", "on-surface": "#0b1c30", "on-secondary-container": "#5c647a", "tertiary-container": "#00389a", "tertiary": "#00246b", "on-background": "#0b1c30", "surface-container-low": "#eff4ff", "inverse-on-surface": "#eaf1ff", "error": "#ba1a1a", "surface-container-high": "#dce9ff", "surface-variant": "#d3e4fe", "tertiary-fixed": "#dbe1ff", "on-surface-variant": "#444651", "on-tertiary-container": "#8da9ff", "primary": "#00236f", "secondary-fixed": "#dae2fd", "secondary": "#565e74", "on-primary-container": "#90a8ff", "inverse-primary": "#b6c4ff", "on-primary-fixed": "#00164e", "on-tertiary-fixed-variant": "#003ea8", "outline": "#757682", "surface-tint": "#4059aa", "surface-container-lowest": "#ffffff", "inverse-surface": "#213145", "surface": "#f8f9ff", "surface-bright": "#f8f9ff", "background": "#f8f9ff", "on-secondary-fixed-variant": "#3f465c", "primary-fixed": "#dce1ff", "on-error-container": "#93000a", "on-secondary-fixed": "#131b2e", "primary-fixed-dim": "#b6c4ff", "on-primary": "#ffffff", "secondary-fixed-dim": "#bec6e0", "error-container": "#ffdad6", "surface-container-highest": "#d3e4fe", "on-secondary": "#ffffff", "on-error": "#ffffff", "outline-variant": "#c5c5d3", "on-tertiary-fixed": "#00174b", "tertiary-fixed-dim": "#b4c5ff", "secondary-container": "#dae2fd" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-xs": "0.25rem", "space-lg": "1.25rem", "gutter": "1rem", "space-sm": "0.5rem", "space-md": "0.75rem", "gutter-compact": "0.5rem", "margin": "1.5rem", "space-xl": "2rem" }, "fontFamily": { "display-lg": [ "Plus Jakarta Sans" ], "label-md": [ "Inter" ], "label-sm": [ "Inter" ], "headline-lg": [ "Plus Jakarta Sans" ], "cell-code": [ "Inter" ], "title-md": [ "Inter" ], "headline-md": [ "Plus Jakarta Sans" ], "headline-sm": [ "Plus Jakarta Sans" ], "body-sm": [ "Inter" ], "body-lg": [ "Inter" ], "body-md": [ "Inter" ] }, "fontSize": { "display-lg": [ "32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "label-md": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" } ], "headline-lg": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "cell-code": [ "11px", { "lineHeight": "14px", "fontWeight": "700" } ], "title-md": [ "15px", { "lineHeight": "20px", "fontWeight": "600" } ], "headline-md": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "headline-sm": [ "16px", { "lineHeight": "24px", "fontWeight": "600" } ], "body-sm": [ "12px", { "lineHeight": "16px", "fontWeight": "400" } ], "body-lg": [ "15px", { "lineHeight": "22px", "fontWeight": "400" } ], "body-md": [ "13px", { "lineHeight": "18px", "fontWeight": "400" } ] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-14 px-margin flex items-center gap-space-sm bg-primary text-on-primary"><span class="material-symbols-outlined text-[22px]">stacked_bar_chart</span><div class="flex flex-col"><span class="font-headline-sm text-headline-sm tracking-tight leading-none">Control de Asistencia</span><span class="font-label-sm text-label-sm text-primary-fixed-dim leading-none mt-0.5">OSAWMS</span></div></div><div class="px-margin py-space-md"></div><nav class="px-space-md flex flex-col gap-space-xs" data-active-classes="bg-primary text-on-primary font-title-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><a aria-current="page" class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl transition-all bg-primary text-on-primary font-title-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]" data-path="matriz-de-asistencia" href="#"><span class="material-symbols-outlined text-[20px]">grid_on</span><span class="font-body-md text-body-md">Matriz de Asistencia</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="colaboradores-y-contratos" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span class="font-body-md text-body-md">Colaboradores y Contratos</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="reporte-de-ceses-y-bajas" href="#"><span class="material-symbols-outlined text-[20px]">person_off</span><span class="font-body-md text-body-md">Reporte de Ceses y Bajas</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="metricas-ejecutivas" href="#"><span class="material-symbols-outlined text-[20px]">insights</span><span class="font-body-md text-body-md">Métricas Ejecutivas</span></a></nav></div><div class="p-space-md"><div class="bg-surface-container px-space-md py-space-sm rounded-xl flex items-center justify-between"><div class="flex flex-col"><span class="font-label-sm text-label-sm text-on-surface-variant">Sincronización</span><span class="font-cell-code text-cell-code text-primary" id="syncStatusLabel">Conectando...</span></div><span class="material-symbols-outlined text-primary text-[18px]">cloud_done</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-margin"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded-xl"><span class="material-symbols-outlined text-secondary text-[18px]">business</span><select class="bg-transparent font-title-md text-title-md text-on-surface outline-none cursor-pointer pr-space-xs" id="accountFilterSelect"><option value="all">Cuentas: Todas</option></select></div><div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded-xl"><span class="material-symbols-outlined text-secondary text-[18px]">calendar_month</span><span class="font-body-md text-body-md text-on-surface" id="headerMonthLabel">Cargando...</span><span class="material-symbols-outlined text-secondary text-[16px]">expand_more</span></div><div class="flex-1 flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded-xl"><span class="material-symbols-outlined text-secondary text-[18px]">search</span><input class="w-full bg-transparent font-body-sm text-body-sm text-on-surface placeholder:text-outline outline-none" placeholder="Buscar DNI, colaborador o cargo... (Presione /)" type="text"></div></div><div class="flex items-center gap-space-md"><button class="p-space-xs rounded-xl hover:bg-surface-container transition-colors relative text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button><button class="p-space-xs rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[20px]">history_toggle_off</span></button><div class="h-6 w-px bg-surface-container-highest"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="text-right hidden sm:block"><div class="font-title-md text-title-md text-on-surface leading-tight">Lirian Cuba</div><div class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Ejecutivo de Cuenta</div></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-14 bg-surface min-h-screen px-margin py-margin"><div class="flex flex-col w-full gap-space-lg">
+<!-- TOP BAR: BREADCRUMB & EXECUTIVE ACTIONS -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<span class="">Operaciones RR.HH.</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="">Control de Dotación</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Matriz de Asistencia</span>
+</div>
+<div class="flex items-center gap-space-md mt-1">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Matriz de Control y Asistencia Diaria</h1>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Periodo Activo
+        </span>
+</div>
+</div>
+<!-- ACTION BUTTONS -->
+<div class="flex items-center flex-wrap gap-space-sm"><button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-container text-on-primary font-semibold text-title-md hover:bg-tertiary transition-all shadow-md transform hover:scale-[1.02] cursor-pointer" id="btnNewMarcacion" onclick="openDayEditModal({mode:'create'})"><span class="material-symbols-outlined text-[20px]">more_time</span><span class="">+ Registrar Asistencia</span></button><button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-error-container text-on-error-container font-title-md text-title-md hover:bg-error hover:text-on-error transition-all shadow-sm" id="btnOpenCesesDrawer" onclick="document.getElementById('cesesModal').classList.remove('hidden')"><span class="material-symbols-outlined text-[18px]">person_off</span><span id="btnCesesCountLabel">Gestionar Ceses</span></button><button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-surface-container-low text-on-surface font-title-md text-title-md hover:bg-surface-container transition-all shadow-sm"><span class="material-symbols-outlined text-[18px]">file_download</span><span class="">Exportar Reporte</span></button></div>
+</div>
+<!-- KPI METRICS DECK -->
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-space-sm">
+<!-- Total Colaboradores -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase">Total Nómina</span>
+<span class="material-symbols-outlined text-primary text-[18px]">groups</span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg text-on-surface leading-none" id="kpiTotalNomina">-</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1"><span id="kpiActivos">-</span> Activos · <span class="text-error font-bold"><span id="kpiCesados">-</span> Cesados</span></div>
+</div>
+</div>
+<!-- Asistidos (A) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-primary">
+<span class="font-label-sm text-label-sm uppercase font-bold">Asistencias (A)</span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg text-primary leading-none" id="kpiAsistencias">-</div>
+<div class="flex items-center gap-1 mt-1">
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" id="kpiAsistBar" style="width: 0%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold" id="kpiAsistPct">-</span>
+</div>
+</div>
+</div>
+<!-- Faltas (F) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-error">
+<span class="font-label-sm text-label-sm uppercase font-bold">Faltas (F)</span>
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg text-error leading-none" id="kpiFaltas">-</div>
+<span class="font-label-sm text-label-sm text-error mt-1 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">warning</span> Crítico (Injustif.)
+        </span>
+</div>
+</div>
+<!-- Tardanzas (T) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-secondary-fixed">
+<span class="font-label-sm text-label-sm uppercase font-bold">Tardanzas (T)</span>
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg text-on-surface leading-none" id="kpiTardanzas">-</div>
+<span class="font-label-sm text-label-sm text-secondary mt-1">3 cuentas impactadas</span>
+</div>
+</div>
+<!-- Descansos Medicos (DM) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-tertiary">
+<span class="font-label-sm text-label-sm uppercase font-bold">Descanso Méd.</span>
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg text-tertiary leading-none" id="kpiDM">-</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Certificado EsSalud</span>
+</div>
+</div>
+<!-- Licencias (L) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase font-bold">Licencias (L)</span>
+<span class="w-2.5 h-2.5 rounded-full bg-surface-dim"></span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg text-on-surface leading-none" id="kpiLicencias">-</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">1 Colaborador (Goce)</span>
+</div>
+</div>
+<!-- Vacaciones (V) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-primary-container">
+<span class="font-label-sm text-label-sm uppercase font-bold">Vacaciones (V)</span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary-fixed-dim"></span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg text-primary-container leading-none" id="kpiVacaciones">-</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Programación Julio</span>
+</div>
+</div>
+<!-- Alerta Ceses -->
+<div class="bg-error-container p-space-md rounded-xl shadow-sm flex flex-col justify-between cursor-pointer hover:bg-error hover:text-on-error transition-all group" onclick="document.getElementById('cesesModal').classList.remove('hidden')">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase font-bold group-hover:text-on-error text-on-error-container">Alerta Ceses</span>
+<span class="material-symbols-outlined text-[18px] group-hover:text-on-error text-on-error-container">exit_to_app</span>
+</div>
+<div class="mt-2">
+<div class="font-display-lg text-display-lg font-bold group-hover:text-on-error text-on-error-container leading-none" id="kpiCesesAlerta">-</div>
+<span class="font-label-sm text-label-sm group-hover:text-on-error text-on-error-container mt-1 underline">Ver detalles de bajas</span>
+</div>
+</div>
+</div>
+<!-- CONTROL & FILTER TOOLBAR -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<!-- Month navigation & period toggle -->
+<div class="flex items-center flex-wrap gap-space-sm"><div class="flex items-center bg-surface-container-low rounded-xl p-1"><button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant transition-colors" id="btnPrevMonth" title="Mes Anterior"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button><div class="flex items-center gap-1.5 px-space-sm"><span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span><span class="font-title-md text-title-md text-on-surface font-semibold" id="currentMonthLabel">Cargando...</span><span class="font-label-sm text-label-sm text-on-surface-variant" id="currentMonthDaysLabel">(- Días)</span></div><button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant transition-colors" id="btnNextMonth" title="Mes Siguiente"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button></div><div class="h-6 w-px bg-surface-container-highest"></div><div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl"><button class="px-space-md py-1 rounded-lg bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold shadow-sm" data-filter="all" id="btnFilterAll">Todos (<span id="filterCountAll">-</span>)</button><button class="px-space-md py-1 rounded-lg hover:bg-surface-container text-on-surface-variant font-label-sm text-label-sm transition-colors" data-filter="active" id="btnFilterActive">Activos (<span id="filterCountActive">-</span>)</button><button class="px-space-md py-1 rounded-lg hover:bg-surface-container text-error font-label-sm text-label-sm transition-colors" data-filter="ceased" id="btnFilterCeased">Cesados (<span id="filterCountCeased">-</span>)</button></div></div>
+<!-- Right Side: Quick Search and View Toggle -->
+<div class="flex items-center gap-space-sm flex-1 max-w-md">
+<div class="flex-1 flex items-center gap-space-xs bg-surface-container-low px-space-md py-1.5 rounded-xl">
+<span class="material-symbols-outlined text-secondary text-[18px]">search</span>
+<input class="w-full bg-transparent font-body-sm text-body-sm text-on-surface placeholder:text-outline outline-none" id="searchInput" placeholder="Filtrar por colaborador, DNI o código..." type="text">
+<kbd class="hidden sm:inline-block px-1.5 py-0.5 rounded bg-surface-container font-cell-code text-cell-code text-on-surface-variant">/</kbd>
+</div>
+<div class="flex items-center bg-surface-container-low p-1 rounded-xl">
+<button class="p-1.5 rounded-lg bg-surface-container-lowest text-primary shadow-sm" title="Vista Matriz Completa">
+<span class="material-symbols-outlined text-[18px]">table_chart</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant transition-colors" title="Vista Resumen">
+<span class="material-symbols-outlined text-[18px]">view_column</span>
+</button>
+</div>
+</div>
+</div>
+<!-- STATUS CODES LEGEND -->
+<div class="bg-surface-container-lowest px-space-md py-2.5 rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm flex-wrap"><span class="font-label-sm text-label-sm uppercase font-bold text-on-surface-variant mr-1">Leyenda de Estados:</span><div class="flex items-center gap-1.5"><span class="w-5 h-5 rounded bg-primary-container text-on-primary font-cell-code text-cell-code flex items-center justify-center font-bold">A</span><span class="text-body-sm text-on-surface">Asistencia</span></div><div class="flex items-center gap-1.5"><span class="w-5 h-5 rounded bg-surface-variant text-primary font-cell-code text-cell-code flex items-center justify-center font-bold">T</span><span class="text-body-sm text-on-surface">Tardanza</span></div><div class="flex items-center gap-1.5"><span class="w-5 h-5 rounded bg-error text-on-error font-cell-code text-cell-code flex items-center justify-center font-bold">F</span><span class="text-body-sm text-on-surface">Falta Injustificada</span></div><div class="flex items-center gap-1.5"><span class="w-5 h-5 rounded bg-tertiary text-on-tertiary font-cell-code text-cell-code flex items-center justify-center font-bold">DM</span><span class="text-body-sm text-on-surface">Descanso Médico</span></div><div class="flex items-center gap-1.5"><span class="w-5 h-5 rounded bg-error-container text-on-error-container font-cell-code text-cell-code flex items-center justify-center font-bold">L</span><span class="text-body-sm text-on-surface">Licencia</span></div><div class="flex items-center gap-1.5"><span class="w-5 h-5 rounded bg-surface-container-high text-primary font-cell-code text-cell-code flex items-center justify-center font-bold">V</span><span class="text-body-sm text-on-surface">Vacaciones</span></div><div class="flex items-center gap-1.5"><span class="w-5 h-5 rounded bg-error text-on-error font-cell-code text-cell-code flex items-center justify-center font-bold">X</span><span class="text-body-sm text-error font-semibold">Fecha Cese</span></div></div><div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm"><span class="material-symbols-outlined text-[16px] text-primary">touch_app</span><span class="">Click en cualquier celda para editar marcación</span></div></div>
+<!-- MAIN ATTENDANCE MATRIX TABLE (FULL HORIZONTAL SCROLL) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- TABLE CONTAINER WITH FROZEN COLUMNS -->
+<div class="overflow-x-auto w-full relative">
+<table class="w-full text-left border-collapse select-none">
+<!-- THEAD -->
+<thead class="bg-surface-container-low text-on-surface font-label-sm text-label-sm uppercase tracking-wider sticky top-0 z-30">
+<tr>
+<!-- FROZEN LEFT HEADERS -->
+<th class="p-2.5 sticky left-0 z-40 bg-surface-container-low w-10 text-center">N°</th>
+<th class="p-2.5 sticky left-10 z-40 bg-surface-container-low min-w-[260px]">Colaborador &amp; Cuenta</th>
+<th class="p-2.5 sticky left-[300px] z-40 bg-surface-container-low min-w-[130px] shadow-[4px_0_6px_-2px_rgba(0,0,0,0.06)]">DNI / Código</th>
+<th class="p-2.5 min-w-[150px]">Horario / Turno</th>
+<th class="p-2.5 min-w-[110px]">Contacto</th>
+<th class="p-2.5 min-w-[140px]">Estado Operativo</th>
+<!-- DAY_HEADERS_PLACEHOLDER -->
+<!-- FROZEN RIGHT TOTALS -->
+<th class="p-2.5 bg-primary text-on-primary text-center font-bold min-w-[50px]">ASI</th>
+<th class="p-2.5 bg-error text-on-error text-center font-bold min-w-[45px]">FAL</th>
+<th class="p-2.5 bg-tertiary text-on-tertiary text-center font-bold min-w-[45px]">DM</th>
+<th class="p-2.5 bg-surface-dim text-on-surface text-center font-bold min-w-[45px]">LIC</th>
+<th class="p-2.5 bg-surface-container-high text-on-surface text-center font-bold min-w-[45px]">VAC</th>
+<th class="p-2.5 bg-surface-container-low text-on-surface text-center font-bold min-w-[45px]">TAR</th>
+</tr>
+</thead>
+<!-- TBODY: RECORDS FROM ORIGINAL SPREADSHEETS -->
+<tbody class="font-body-sm text-body-sm divide-y-0 text-on-surface" id="attendanceTableBody">
+<!-- Filas generadas dinámicamente por JS desde Google Sheets -->
+</tbody>
+</table>
+</div>
+<!-- TABLE FOOTER & PAGINATION -->
+<div class="px-space-md py-space-sm bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-md">
+<span class="">Mostrando <strong class="text-on-surface font-semibold">1-10</strong> de <strong class="text-on-surface font-semibold">27</strong> colaboradores</span>
+<div class="h-4 w-px bg-surface-container-highest"></div>
+<div class="flex items-center gap-1">
+<span class="">Filas por página:</span>
+<select class="bg-transparent font-title-md text-title-md text-on-surface cursor-pointer">
+<option>10</option>
+<option selected="">25</option>
+<option>50</option>
+<option>Todos (27)</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-lowest shadow-sm text-on-surface font-title-md text-title-md hover:bg-surface-container transition-colors disabled:opacity-40" disabled="">
+          Anterior
+        </button>
+<div class="flex items-center gap-1 px-1">
+<button class="w-7 h-7 rounded-lg bg-primary text-on-primary font-cell-code text-cell-code font-bold">1</button>
+<button class="w-7 h-7 rounded-lg hover:bg-surface-container text-on-surface font-cell-code text-cell-code">2</button>
+<button class="w-7 h-7 rounded-lg hover:bg-surface-container text-on-surface font-cell-code text-cell-code">3</button>
+</div>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-lowest shadow-sm text-on-surface font-title-md text-title-md hover:bg-surface-container transition-colors">
+          Siguiente
+        </button>
+</div>
+</div>
+</div>
+<!-- CONTROL DE CESES Y BAJAS (DRAWER / MODAL) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-inverse-surface/40 backdrop-blur-sm hidden" id="cesesModal">
+<div class="bg-surface-container-lowest w-full max-w-4xl rounded-xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+<!-- Header -->
+<div class="px-space-lg py-space-md bg-error-container text-on-error-container flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[24px]">person_off</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold">Registro de Colaboradores Cesados y Bajas</h2>
+<p class="font-label-sm text-label-sm text-on-error-container opacity-90">Periodo Oficial: Julio 2024 · Validación para Planilla y Liquidación</p>
+</div>
+</div>
+<button class="p-1 rounded-lg hover:bg-error/10 text-on-error-container transition-colors" id="btnCloseCesesModal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Content -->
+<div class="p-space-lg flex flex-col gap-space-md max-h-[716px] overflow-y-auto">
+<div class="flex items-center justify-between bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-error text-[20px]">priority_high</span>
+<span class="font-body-md text-body-md text-on-surface">3 colaboradores dados de baja en este mes. Verificar que no registren marcaciones posteriores a su cese.</span>
+</div>
+<button class="px-space-md py-1.5 rounded-lg bg-primary text-on-primary font-title-md text-title-md hover:bg-tertiary transition-colors shadow-sm">
+            + Registrar Nueva Baja
+          </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low font-label-sm text-label-sm text-on-surface uppercase tracking-wider">
+<tr>
+<th class="p-3">Colaborador</th>
+<th class="p-3">Cuenta / Cliente</th>
+<th class="p-3 text-center">DNI</th>
+<th class="p-3 text-center">Fecha de Cese</th>
+<th class="p-3">Motivo de Baja</th>
+<th class="p-3 text-center">Liquidación</th>
+<th class="p-3 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
+<!-- Item 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3 font-semibold">
+<div class="">MURAYARI PINCHI MELVIN JUAN</div>
+<span class="text-[11px] text-on-surface-variant">Cód: 2000015310</span>
+</td>
+<td class="p-3">
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-label-sm font-bold">LOREAL</span>
+</td>
+<td class="p-3 text-center font-cell-code text-cell-code">76640811</td>
+<td class="p-3 text-center font-cell-code text-cell-code text-error font-bold bg-error-container/30 rounded">12/07/2024</td>
+<td class="p-3 text-on-surface-variant">Renuncia Voluntaria (Carta Notarial)</td>
+<td class="p-3 text-center">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-semibold">Calculada</span>
+</td>
+<td class="p-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="Ver Expediente">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Item 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3 font-semibold">
+<div class="">RIVAS CASTRILLON JUAN ENRIQUE</div>
+<span class="text-[11px] text-on-surface-variant">Cód: 2000009962</span>
+</td>
+<td class="p-3">
+<span class="px-2 py-0.5 rounded bg-tertiary text-on-tertiary font-label-sm text-label-sm font-bold">COPELLO</span>
+</td>
+<td class="p-3 text-center font-cell-code text-cell-code">40179661</td>
+<td class="p-3 text-center font-cell-code text-cell-code text-error font-bold bg-error-container/30 rounded">18/07/2024</td>
+<td class="p-3 text-on-surface-variant">Vencimiento de Contrato Plazo Fijo</td>
+<td class="p-3 text-center">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">En Trámite</span>
+</td>
+<td class="p-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="Ver Expediente">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Item 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3 font-semibold">
+<div class="">PAREDES ENCINAS ELMA FLOR</div>
+<span class="text-[11px] text-on-surface-variant">Cód: 2000003637</span>
+</td>
+<td class="p-3">
+<span class="px-2 py-0.5 rounded bg-tertiary text-on-tertiary font-label-sm text-label-sm font-bold">COPELLO</span>
+</td>
+<td class="p-3 text-center font-cell-code text-cell-code">76320301</td>
+<td class="p-3 text-center font-cell-code text-cell-code text-error font-bold bg-error-container/30 rounded">22/07/2024</td>
+<td class="p-3 text-on-surface-variant">Mutuo Disenso</td>
+<td class="p-3 text-center">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">Pendiente RRHH</span>
+</td>
+<td class="p-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="Ver Expediente">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footer -->
+<div class="px-space-lg py-space-sm bg-surface-container-low flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Última actualización sincronizada con T-Registro SUNAT</span>
+<button class="px-space-md py-1.5 rounded-xl bg-surface-container-highest text-on-surface font-title-md text-title-md hover:bg-surface-dim transition-colors" id="btnCloseCesesModal2">
+          Cerrar Ventana
+        </button>
+</div>
+</div>
+</div>
+<!-- MODAL: REGISTRAR NOVEDAD / CAMBIO DE ASISTENCIA RAPIDO -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-inverse-surface/40 backdrop-blur-sm transition-all duration-200 hidden" id="attendanceModal">
+<div class="bg-surface-container-lowest w-full max-w-md rounded-xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+<div class="px-space-lg py-space-md bg-primary text-on-primary flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">how_to_reg</span></div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-primary leading-tight" id="dayEditTitle">Registrar Marcación</h2>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-primary hover:bg-white/10 transition-colors cursor-pointer" onclick="closeDayEditModal()" type="button"><span class="material-symbols-outlined text-[20px]">close</span></button>
+</div>
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="hidden flex-col gap-1" id="dayEditEmployeeStatic">
+<div class="font-title-md text-title-md text-on-surface font-semibold" id="dayEditEmployeeName">-</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant" id="dayEditEmployeeMeta">-</div>
+</div>
+<div class="flex flex-col gap-1.5" id="dayEditEmployeeSelectWrap">
+<label class="font-label-sm text-label-sm uppercase font-semibold text-on-surface-variant">Colaborador</label>
+<select class="w-full bg-surface-container-low px-space-md py-2.5 rounded-xl border border-surface-container-highest font-title-md text-title-md text-on-surface outline-none" id="dayEditEmployeeSelect"></select>
+</div>
+<div class="flex flex-col gap-1.5" id="dayEditDaySelectWrap">
+<label class="font-label-sm text-label-sm uppercase font-semibold text-on-surface-variant">Día del mes</label>
+<select class="w-full bg-surface-container-low px-space-md py-2.5 rounded-xl border border-surface-container-highest font-title-md text-title-md text-on-surface outline-none" id="dayEditDaySelect"></select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm uppercase font-semibold text-on-surface-variant">Estado / Marcación</label>
+<div class="grid grid-cols-3 gap-2" id="dayEditStatusGrid"></div>
+</div>
+<div class="hidden font-label-sm text-label-sm text-error" id="dayEditError"></div>
+</div>
+<div class="px-space-lg py-space-md bg-surface-container-low border-t-0 flex items-center justify-end gap-space-sm">
+<button class="px-space-md py-2 rounded-xl bg-surface-container text-on-surface font-title-md text-title-md hover:bg-surface-dim transition-colors cursor-pointer" onclick="closeDayEditModal()" type="button">Cancelar</button>
+<button class="px-space-lg py-2 rounded-xl bg-primary text-on-primary font-title-md text-title-md hover:bg-tertiary transition-all shadow-md inline-flex items-center gap-1.5 cursor-pointer" id="dayEditSaveBtn" onclick="saveDayEdit()" type="button"><span class="material-symbols-outlined text-[18px]">save</span><span>Guardar</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- INTERACTIVITY SCRIPT -->
+<script>
+/* =======================================================================
+   CONTROL DE ASISTENCIA — Conexión en vivo a Google Sheets (Apps Script)
+   ======================================================================= */
+
+// URL de tu Web App de Apps Script (Extensiones > Apps Script > Implementar)
+const API_URL = 'https://script.google.com/macros/s/AKfycbyImHf-qlTdUNHDvZK0wts8RwW_1WMiTDBStjeLjOXfN7_yATATmyvn8JTkG-CYdAxpkw/exec';
+
+const MESES = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SETIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+const DIAS_SEMANA = ['D','L','M','M','J','V','S']; // getDay(): 0=Domingo
+
+// Leyenda de estados (código -> {label, badgeClass})
+const ESTADOS = {
+  'A':  { label: 'Asistió',            badgeClass: 'bg-primary-container text-on-primary' },
+  'T':  { label: 'Tardanza',           badgeClass: 'bg-surface-variant text-primary' },
+  'F':  { label: 'Falta',              badgeClass: 'bg-error text-on-error' },
+  'FJ': { label: 'Falta Justificada',  badgeClass: 'bg-surface-container-high text-on-surface' },
+  'DM': { label: 'Descanso Médico',    badgeClass: 'bg-tertiary text-on-tertiary' },
+  'L':  { label: 'Licencia',           badgeClass: 'bg-error-container text-on-error-container' },
+  'V':  { label: 'Vacaciones',         badgeClass: 'bg-surface-container-high text-primary' },
+  'S':  { label: 'Suspensión',         badgeClass: 'bg-secondary text-on-secondary' },
+  'C':  { label: 'Cesado',             badgeClass: 'bg-inverse-surface text-inverse-on-surface' }
+};
+
+// Estado global de la app
+const state = {
+  personal: [],
+  asistencia: [],
+  anio: null,
+  mesIdx: null, // 0-11
+  filter: 'all',
+  editMode: null, // 'create' | 'edit'
+  editTarget: null // {codigo, dia}
+};
+
+function hoy() { return new Date(); }
+
+function initPeriodoActual() {
+  const d = hoy();
+  state.anio = d.getFullYear();
+  state.mesIdx = d.getMonth();
+}
+
+function diasEnMes(anio, mesIdx) {
+  return new Date(anio, mesIdx + 1, 0).getDate();
+}
+
+// ---------- Llamadas a la API ----------
+
+async function apiGetAll() {
+  const res = await fetch(API_URL + '?action=getAll');
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || 'Error al leer datos');
+  return json;
+}
+
+// Nota: se usa Content-Type: text/plain para evitar el preflight CORS
+// (Apps Script no responde bien a OPTIONS por defecto).
+async function apiPost(body) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(body)
+  });
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || 'Error al guardar');
+  return json;
+}
+
+async function cargarDatos() {
+  const syncLabel = document.getElementById('syncStatusLabel');
+  if (syncLabel) syncLabel.textContent = 'Sincronizando...';
+  try {
+    const data = await apiGetAll();
+    state.personal = data.personal || [];
+    state.asistencia = data.asistencia || [];
+    if (syncLabel) syncLabel.textContent = 'En línea';
+    render();
+  } catch (err) {
+    console.error(err);
+    if (syncLabel) syncLabel.textContent = 'Sin conexión';
+    alert('No se pudo conectar con el Google Sheet. Revisa la URL del script o tu conexión.\\n' + err.message);
+  }
+}
+
+// ---------- Helpers de datos ----------
+
+function mesNombre(idx) { return MESES[idx]; }
+
+function filaAsistenciaDe(codigo) {
+  return state.asistencia.find(r =>
+    String(r['CODIGO']) === String(codigo) &&
+    String(r['AÑO']) === String(state.anio) &&
+    String(r['MES']).toUpperCase() === mesNombre(state.mesIdx)
+  );
+}
+
+function ultimaFilaDe(codigo) {
+  const filas = state.asistencia.filter(r => String(r['CODIGO']) === String(codigo));
+  return filas.length ? filas[filas.length - 1] : null;
+}
+
+function estaCesado(codigo) {
+  // Cesado si su fila del mes actual (o la más reciente) tiene CESADO > 0
+  const fila = filaAsistenciaDe(codigo) || ultimaFilaDe(codigo);
+  return !!(fila && Number(fila['CESADO']) > 0);
+}
+
+// ---------- Render de cabecera de días ----------
+
+function renderDayHeaders() {
+  const headerRow = document.querySelector('thead tr');
+  if (!headerRow) return;
+  // Quitar los <th> de días previamente generados
+  headerRow.querySelectorAll('th[data-day-th]').forEach(th => th.remove());
+  const placeholder = Array.from(headerRow.childNodes).find(n => n.nodeType === 8 && n.textContent.includes('DAY_HEADERS_PLACEHOLDER'));
+
+  const nDias = diasEnMes(state.anio, state.mesIdx);
+  const frag = document.createDocumentFragment();
+  for (let d = 1; d <= nDias; d++) {
+    const fecha = new Date(state.anio, state.mesIdx, d);
+    const esFDS = fecha.getDay() === 0 || fecha.getDay() === 6;
+    const th = document.createElement('th');
+    th.setAttribute('data-day-th', '1');
+    th.className = 'w-8 text-center p-1 font-cell-code text-cell-code' + (esFDS ? ' bg-surface-container' : '');
+    th.innerHTML = d + '<div class="text-[9px] font-normal ' + (esFDS ? 'text-secondary' : 'text-on-surface-variant') + '">' + DIAS_SEMANA[fecha.getDay()] + '</div>';
+    frag.appendChild(th);
+  }
+  if (placeholder) {
+    placeholder.parentNode.insertBefore(frag, placeholder.nextSibling);
+  } else {
+    headerRow.appendChild(frag);
+  }
+}
+
+// ---------- Render de tabla ----------
+
+function badgeHtml(codigo, dia, valor) {
+  const v = (valor || '').toString().trim().toUpperCase();
+  if (!v) {
+    return '<td class="p-0.5 text-center"></td>';
+  }
+  const est = ESTADOS[v] || { label: v, badgeClass: 'bg-surface-container text-on-surface' };
+  return '<td class="p-0.5 text-center">' +
+    '<span class="w-6 h-6 inline-flex items-center justify-center rounded ' + est.badgeClass + ' font-cell-code text-cell-code font-bold cursor-pointer transition-transform hover:scale-110" ' +
+    'data-codigo="' + codigo + '" data-dia="' + dia + '" title="' + est.label + '">' + v + '</span></td>';
+}
+
+function renderTable() {
+  const tbody = document.getElementById('attendanceTableBody');
+  if (!tbody) return;
+  const nDias = diasEnMes(state.anio, state.mesIdx);
+
+  let personalFiltrado = state.personal.filter(p => {
+    if (state.filter === 'active') return !estaCesado(p['CODIGO']);
+    if (state.filter === 'ceased') return estaCesado(p['CODIGO']);
+    return true;
+  });
+
+  const rowsHtml = personalFiltrado.map((p, idx) => {
+    const codigo = p['CODIGO'];
+    const fila = filaAsistenciaDe(codigo);
+    const ultima = fila || ultimaFilaDe(codigo);
+    const cesado = estaCesado(codigo);
+
+    let diasHtml = '';
+    for (let d = 1; d <= nDias; d++) {
+      const valor = fila ? fila[String(d)] : '';
+      diasHtml += badgeHtml(codigo, d, valor);
+    }
+
+    // Totales: de la fila del mes si existe; Tardanzas se cuenta client-side (no está en el Sheet)
+    let asi = 0, falta = 0, dm = 0, lic = 0, vac = 0, tar = 0;
+    if (fila) {
+      asi = Number(fila['ASITIDOS'] || 0);
+      falta = Number(fila['FALTA'] || 0);
+      dm = Number(fila['DM'] || 0);
+      lic = Number(fila['LICENCIA'] || 0);
+      vac = Number(fila['VACACIONES'] || 0);
+      for (let d = 1; d <= nDias; d++) {
+        if (String(fila[String(d)] || '').toUpperCase() === 'T') tar++;
+      }
+    }
+
+    const horario = ultima ? (ultima['HORARIO'] || '-') : '-';
+    const cuenta = ultima ? (ultima['CUENTA'] || p['CUENTA'] || '-') : (p['CUENTA'] || '-');
+
+    return '<tr class="hover:bg-surface-container-low transition-colors group">' +
+      '<td class="p-2 text-center font-cell-code text-cell-code text-on-surface-variant sticky left-0 z-20 bg-surface-container-lowest group-hover:bg-surface-container-low">' + (idx + 1) + '</td>' +
+      '<td class="p-2 sticky left-10 z-20 bg-surface-container-lowest group-hover:bg-surface-container-low">' +
+        '<div class="font-title-md text-title-md text-on-surface font-semibold truncate">' + (p['COLABORADOR'] || '-') + '</div>' +
+        '<div class="flex items-center gap-1.5 mt-0.5">' +
+          '<span class="px-1.5 py-0.2 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">' + cuenta + '</span>' +
+          '<span class="text-on-surface-variant text-[11px]">Ejec: ' + (p['EJECUTIVO'] || '-') + '</span>' +
+        '</div>' +
+      '</td>' +
+      '<td class="p-2 sticky left-[300px] z-20 bg-surface-container-lowest group-hover:bg-surface-container-low shadow-[4px_0_6px_-2px_rgba(0,0,0,0.06)]">' +
+        '<div class="font-cell-code text-cell-code font-bold text-on-surface">' + (p['DNI'] || '-') + '</div>' +
+        '<div class="text-[10px] text-on-surface-variant">Cód: ' + codigo + '</div>' +
+      '</td>' +
+      '<td class="p-2"><div class="text-[11px] font-semibold text-primary">' + (p['TURNO'] || '-') + '</div>' +
+        '<div class="text-[11px] text-on-surface-variant whitespace-nowrap">' + horario + '</div></td>' +
+      '<td class="p-2 font-cell-code text-cell-code text-primary">' + (p['CELULARES'] || '-') + '</td>' +
+      '<td class="p-2"><span class="inline-flex items-center px-2 py-0.5 rounded-full ' + (cesado ? 'bg-error-container text-on-error-container' : 'bg-surface-container text-primary') + ' font-label-sm text-label-sm font-semibold">' + (cesado ? 'Cesado' : 'Activo') + '</span></td>' +
+      diasHtml +
+      '<td class="p-2 text-center font-cell-code text-cell-code font-bold bg-surface-container-low text-primary">' + asi + '</td>' +
+      '<td class="p-2 text-center font-cell-code text-cell-code font-bold text-error">' + falta + '</td>' +
+      '<td class="p-2 text-center font-cell-code text-cell-code font-bold text-tertiary">' + dm + '</td>' +
+      '<td class="p-2 text-center font-cell-code text-cell-code font-bold text-on-surface-variant">' + lic + '</td>' +
+      '<td class="p-2 text-center font-cell-code text-cell-code font-bold text-on-surface-variant">' + vac + '</td>' +
+      '<td class="p-2 text-center font-cell-code text-cell-code font-bold text-on-surface-variant">' + tar + '</td>' +
+    '</tr>';
+  }).join('');
+
+  tbody.innerHTML = rowsHtml || '<tr><td colspan="12" class="p-6 text-center text-on-surface-variant">No hay colaboradores para mostrar.</td></tr>';
+
+  // Wire clicks en los badges recién creados
+  tbody.querySelectorAll('span[data-codigo][data-dia]').forEach(badge => {
+    badge.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const codigo = badge.getAttribute('data-codigo');
+      const dia = Number(badge.getAttribute('data-dia'));
+      const p = state.personal.find(x => String(x['CODIGO']) === String(codigo));
+      openDayEditModal({ mode: 'edit', codigo, dia, nombre: p ? p['COLABORADOR'] : codigo, valorActual: badge.textContent.trim() });
+    });
+  });
+
+  aplicarFiltroBusqueda();
+}
+
+// ---------- KPIs ----------
+
+function renderKPIs() {
+  const totalNomina = state.personal.length;
+  let activos = 0, cesados = 0, asistencias = 0, faltas = 0, tardanzas = 0, dm = 0, licencias = 0, vacaciones = 0;
+
+  state.personal.forEach(p => {
+    if (estaCesado(p['CODIGO'])) cesados++; else activos++;
+    const fila = filaAsistenciaDe(p['CODIGO']);
+    if (fila) {
+      asistencias += Number(fila['ASITIDOS'] || 0);
+      faltas += Number(fila['FALTA'] || 0);
+      dm += Number(fila['DM'] || 0);
+      licencias += Number(fila['LICENCIA'] || 0);
+      vacaciones += Number(fila['VACACIONES'] || 0);
+      const nDias = diasEnMes(state.anio, state.mesIdx);
+      for (let d = 1; d <= nDias; d++) {
+        if (String(fila[String(d)] || '').toUpperCase() === 'T') tardanzas++;
+      }
+    }
+  });
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('kpiTotalNomina', totalNomina);
+  set('kpiActivos', activos);
+  set('kpiCesados', cesados);
+  set('kpiAsistencias', asistencias);
+  set('kpiFaltas', faltas);
+  set('kpiTardanzas', tardanzas);
+  set('kpiDM', dm);
+  set('kpiLicencias', licencias);
+  set('kpiVacaciones', vacaciones);
+  set('kpiCesesAlerta', cesados);
+  set('filterCountAll', totalNomina);
+  set('filterCountActive', activos);
+  set('filterCountCeased', cesados);
+  const btnCesesLabel = document.getElementById('btnCesesCountLabel');
+  if (btnCesesLabel) btnCesesLabel.textContent = 'Gestionar Ceses (' + cesados + ')';
+
+  const pctBase = asistencias + faltas;
+  const pct = pctBase > 0 ? Math.round((asistencias / pctBase) * 1000) / 10 : 0;
+  set('kpiAsistPct', pct + '%');
+  const bar = document.getElementById('kpiAsistBar');
+  if (bar) bar.style.width = Math.min(pct, 100) + '%';
+}
+
+// ---------- Filtro de búsqueda (texto) ----------
+
+function aplicarFiltroBusqueda() {
+  const searchInput = document.getElementById('searchInput');
+  if (!searchInput) return;
+  const query = searchInput.value.toLowerCase().trim();
+  document.querySelectorAll('#attendanceTableBody tr').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = !query || text.includes(query) ? '' : 'none';
+  });
+}
+
+// ---------- Selector de cuentas ----------
+
+function renderAccountFilter() {
+  const select = document.getElementById('accountFilterSelect');
+  if (!select) return;
+  const cuentas = Array.from(new Set(state.personal.map(p => p['CUENTA']).filter(Boolean))).sort();
+  select.innerHTML = '<option value="all">Cuentas: Todas</option>' +
+    cuentas.map(c => '<option value="' + c + '">Cuenta: ' + c + '</option>').join('');
+}
+
+// ---------- Render general ----------
+
+function render() {
+  const nDias = diasEnMes(state.anio, state.mesIdx);
+  const etiqueta = mesNombre(state.mesIdx).charAt(0) + mesNombre(state.mesIdx).slice(1).toLowerCase() + ' ' + state.anio;
+  document.getElementById('headerMonthLabel').textContent = etiqueta;
+  document.getElementById('currentMonthLabel').textContent = etiqueta;
+  document.getElementById('currentMonthDaysLabel').textContent = '(' + nDias + ' Días)';
+
+  renderDayHeaders();
+  renderAccountFilter();
+  renderTable();
+  renderKPIs();
+}
+
+// ---------- Navegación de mes ----------
+
+function cambiarMes(delta) {
+  let m = state.mesIdx + delta;
+  let a = state.anio;
+  if (m > 11) { m = 0; a++; }
+  if (m < 0) { m = 11; a--; }
+  state.mesIdx = m;
+  state.anio = a;
+  render();
+}
+
+// ---------- Modal de edición / registro ----------
+
+function poblarStatusGrid(selected) {
+  const grid = document.getElementById('dayEditStatusGrid');
+  grid.innerHTML = Object.keys(ESTADOS).map(code => {
+    const est = ESTADOS[code];
+    const activo = selected === code;
+    return '<button type="button" class="p-2 rounded-xl border-2 flex flex-col items-center gap-1 cursor-pointer transition-all ' +
+      (activo ? 'border-primary bg-primary/10' : 'border-surface-container-highest bg-surface-container-lowest hover:bg-surface-container-low') + '" ' +
+      'data-status="' + code + '" onclick="seleccionarEstado(\\'' + code + '\\')">' +
+      '<span class="w-7 h-7 rounded-lg ' + est.badgeClass + ' flex items-center justify-center font-cell-code text-cell-code font-bold">' + code + '</span>' +
+      '<span class="text-[10px] text-on-surface leading-none text-center">' + est.label + '</span>' +
+    '</button>';
+  }).join('');
+}
+
+function seleccionarEstado(code) {
+  state.editTarget.valor = code;
+  document.querySelectorAll('#dayEditStatusGrid button[data-status]').forEach(btn => {
+    const activo = btn.getAttribute('data-status') === code;
+    btn.className = 'p-2 rounded-xl border-2 flex flex-col items-center gap-1 cursor-pointer transition-all ' +
+      (activo ? 'border-primary bg-primary/10' : 'border-surface-container-highest bg-surface-container-lowest hover:bg-surface-container-low');
+  });
+}
+
+function openDayEditModal({ mode, codigo, dia, nombre, valorActual }) {
+  state.editMode = mode;
+  const modal = document.getElementById('attendanceModal');
+  const title = document.getElementById('dayEditTitle');
+  const staticWrap = document.getElementById('dayEditEmployeeStatic');
+  const selectWrap = document.getElementById('dayEditEmployeeSelectWrap');
+  const daySelectWrap = document.getElementById('dayEditDaySelectWrap');
+  const errBox = document.getElementById('dayEditError');
+  errBox.classList.add('hidden');
+
+  const nDias = diasEnMes(state.anio, state.mesIdx);
+  const daySelect = document.getElementById('dayEditDaySelect');
+  daySelect.innerHTML = '';
+  for (let d = 1; d <= nDias; d++) {
+    const opt = document.createElement('option');
+    opt.value = d; opt.textContent = 'Día ' + d;
+    daySelect.appendChild(opt);
+  }
+
+  if (mode === 'edit') {
+    title.textContent = 'Editar Marcación';
+    staticWrap.classList.remove('hidden');
+    staticWrap.classList.add('flex');
+    selectWrap.classList.add('hidden');
+    daySelectWrap.classList.add('hidden');
+    document.getElementById('dayEditEmployeeName').textContent = nombre;
+    document.getElementById('dayEditEmployeeMeta').textContent = 'Código: ' + codigo + ' · Día ' + dia + ' de ' + mesNombre(state.mesIdx).charAt(0) + mesNombre(state.mesIdx).slice(1).toLowerCase();
+    state.editTarget = { codigo, dia, valor: (valorActual || '').toUpperCase() };
+  } else {
+    title.textContent = 'Registrar Asistencia';
+    staticWrap.classList.add('hidden');
+    staticWrap.classList.remove('flex');
+    selectWrap.classList.remove('hidden');
+    daySelectWrap.classList.remove('hidden');
+    const empSelect = document.getElementById('dayEditEmployeeSelect');
+    empSelect.innerHTML = state.personal.map(p => '<option value="' + p['CODIGO'] + '">' + p['COLABORADOR'] + '</option>').join('');
+    daySelect.value = hoy().getDate() <= nDias ? hoy().getDate() : 1;
+    state.editTarget = { codigo: empSelect.value, dia: Number(daySelect.value), valor: 'A' };
+    empSelect.onchange = () => { state.editTarget.codigo = empSelect.value; };
+    daySelect.onchange = () => { state.editTarget.dia = Number(daySelect.value); };
+  }
+
+  poblarStatusGrid(state.editTarget.valor);
+  modal.classList.remove('hidden');
+}
+
+function closeDayEditModal() {
+  document.getElementById('attendanceModal').classList.add('hidden');
+  state.editMode = null;
+  state.editTarget = null;
+}
+
+async function saveDayEdit() {
+  if (!state.editTarget || !state.editTarget.valor) return;
+  const btn = document.getElementById('dayEditSaveBtn');
+  const errBox = document.getElementById('dayEditError');
+  errBox.classList.add('hidden');
+  btn.disabled = true;
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '<span>Guardando...</span>';
+  try {
+    await apiPost({
+      action: 'marcarDia',
+      codigo: state.editTarget.codigo,
+      anio: state.anio,
+      mes: mesNombre(state.mesIdx),
+      dia: state.editTarget.dia,
+      valor: state.editTarget.valor
+    });
+    closeDayEditModal();
+    await cargarDatos(); // refresca todo desde el Sheet (incluye filas nuevas auto-creadas)
+    mostrarToast('Marcación guardada correctamente en el Google Sheet.');
+  } catch (err) {
+    errBox.textContent = 'Error al guardar: ' + err.message;
+    errBox.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHtml;
+  }
+}
+
+function mostrarToast(mensaje) {
+  const toast = document.createElement('div');
+  toast.className = 'fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-surface-container-lowest px-4 py-3 rounded-xl shadow-xl border border-surface-container-highest';
+  toast.innerHTML = '<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">check_circle</span></div>' +
+    '<div class="flex flex-col"><div class="font-title-md text-title-md text-on-surface font-semibold">Listo</div><div class="text-body-sm text-on-surface-variant">' + mensaje + '</div></div>' +
+    '<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant transition-colors" onclick="this.parentElement.remove()"><span class="material-symbols-outlined text-[16px]">close</span></button>';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 5000);
+}
+
+// ---------- Inicialización general ----------
+
+document.addEventListener('DOMContentLoaded', () => {
+  initPeriodoActual();
+
+  // Ceses Modal open/close handlers
+  const cesesModal = document.getElementById('cesesModal');
+  const btnCloseCeses = document.getElementById('btnCloseCesesModal');
+  const btnCloseCeses2 = document.getElementById('btnCloseCesesModal2');
+  if (btnCloseCeses && cesesModal) btnCloseCeses.addEventListener('click', () => cesesModal.classList.add('hidden'));
+  if (btnCloseCeses2 && cesesModal) btnCloseCeses2.addEventListener('click', () => cesesModal.classList.add('hidden'));
+
+  // Navegación de mes
+  document.getElementById('btnPrevMonth')?.addEventListener('click', () => cambiarMes(-1));
+  document.getElementById('btnNextMonth')?.addEventListener('click', () => cambiarMes(1));
+
+  // Filtros Todos/Activos/Cesados
+  document.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.filter = btn.getAttribute('data-filter');
+      document.querySelectorAll('[data-filter]').forEach(b => {
+        b.className = b.className.replace('bg-surface-container-lowest text-primary shadow-sm', 'hover:bg-surface-container text-on-surface-variant');
+      });
+      btn.className = btn.className.replace('hover:bg-surface-container text-on-surface-variant', 'bg-surface-container-lowest text-primary shadow-sm')
+                                    .replace('hover:bg-surface-container text-error', 'bg-surface-container-lowest text-primary shadow-sm');
+      renderTable();
+    });
+  });
+
+  // Filtro de cuenta
+  document.getElementById('accountFilterSelect')?.addEventListener('change', (e) => {
+    const val = e.target.value;
+    document.querySelectorAll('#attendanceTableBody tr').forEach(row => {
+      if (val === 'all') { row.style.display = ''; return; }
+      row.style.display = row.textContent.includes(val) ? '' : 'none';
+    });
+  });
+
+  // Búsqueda en vivo
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', aplicarFiltroBusqueda);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      if (e.key === 'Escape') {
+        cesesModal?.classList.add('hidden');
+        closeDayEditModal();
+      }
+    });
+  }
+
+  cargarDatos();
+});
+</script></main></div>
+
+<div class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-surface-container-lowest px-4 py-3 rounded-xl shadow-xl border border-surface-container-highest animate-in fade-in zoom-in-95 duration-200"><div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">check_circle</span></div><div class="flex flex-col"><div class="font-title-md text-title-md text-on-surface font-semibold">Marcación registrada con éxito</div><div class="text-body-sm text-on-surface-variant">Cuba Araujo Lirian · 08:02 AM (Presente)</div></div><button class="p-1 rounded hover:bg-surface-container text-on-surface-variant transition-colors" onclick="this.parentElement.remove()"><span class="material-symbols-outlined text-[16px]">close</span></button></div>
+
+
+
+</body></html>
