@@ -2251,7 +2251,7 @@ function descargarCodigoNuevo() {
 
 /* ===================== DASHBOARD DE AVANCE ===================== */
 // Se filtra por cuenta (independiente de la cuenta activa del menú) y por documento (WDREF).
-//   Cantidades: Totales = WQTY · Pendientes = CANTIDAD · Avanzadas = INGRESO
+//   Cantidades: Totales = WQTY · Pendientes = CANTIDAD · Avanzadas = WQTY − CANTIDAD (INGRESO no se usa: guarda solo el último movimiento)
 //   Códigos:    Avanzado = código sin pendiente (suma de CANTIDAD = 0) · Pendiente = aún tiene pendiente
 //   Nuevo:      código (WITCUS) que no existe en la Maestra de Artículos de la cuenta
 let dashAccount = '271';
@@ -2335,11 +2335,9 @@ function renderDashboard() {
   const porCodigo = new Map();
   const documentos = new Set();
   rows.forEach(r => {
-    const i = numD(r.INGRESO);
-    const hayCant = !vacioD(r.CANTIDAD);
-    const hayQty = !vacioD(r.WQTY);
-    const t = hayQty ? numD(r.WQTY) : (hayCant ? numD(r.CANTIDAD) : 0) + i;
-    const p = hayCant ? numD(r.CANTIDAD) : Math.max(t - i, 0);
+    const t = vacioD(r.WQTY) ? numD(r.CANTIDAD) : numD(r.WQTY);   // total de la línea
+    const p = vacioD(r.CANTIDAD) ? t : numD(r.CANTIDAD);          // pendiente (CANTIDAD vacía = aún sin avance)
+    const i = Math.max(t - p, 0);                                  // avanzado = total − pendiente
     tot += t; pen += p; ing += i;
     const doc = (r.WDREF || '').toString().trim(); if (doc) documentos.add(doc);
     const cod = (r.WITCUS || '').toString().trim().toUpperCase();
