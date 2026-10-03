@@ -482,24 +482,24 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-md">
 <div class="bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm flex flex-col items-center justify-center gap-gutter-xs lg:row-span-2">
 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold self-start">Avance de ingreso</span>
-<svg class="w-full max-w-[380px]" id="dashGauge" viewBox="-16 0 332 205" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Velocímetro de avance">
+<svg class="w-full max-w-[380px]" id="dashGauge" viewBox="-16 0 332 172" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Velocímetro de avance">
 <g id="dashGaugeZones"></g>
 <g id="dashGaugeTicks"></g>
 <g id="dashGaugeNeedle" style="transform-origin:150px 150px;transform:rotate(-90deg);transition:transform .9s cubic-bezier(.2,.8,.2,1)"><polygon points="145.5,150 150,48 154.5,150" fill="#191c18"/></g>
 <circle cx="150" cy="150" r="10" fill="#191c18"/><circle cx="150" cy="150" r="4" fill="#ffffff"/>
-<text id="dashPct" x="150" y="192" text-anchor="middle" font-size="34" font-weight="700" fill="#191c18" font-family="Inter,sans-serif">0%</text>
 </svg>
+<div class="flex items-baseline justify-center gap-2 -mt-1"><span class="text-[56px] leading-none font-bold text-on-surface" id="dashPct">0%</span><span class="font-label-md text-label-md text-on-surface-variant uppercase font-semibold">de avance</span></div>
 <span class="font-body-sm text-body-sm text-on-surface-variant text-center" id="dashGaugeCaption">—</span>
 </div>
 
 <div class="bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm flex flex-col gap-gutter-sm">
-<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[22px]">inventory</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Cantidades (unidades)</span></div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[22px]">inventory</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Cantidades (unidades)</span><span class="ml-auto bg-secondary-container text-on-secondary-container px-2.5 py-0.5 rounded-full font-label-md text-label-md font-bold" id="dashQtyPct">0%</span></div>
 <div class="grid grid-cols-3 gap-gutter-sm"><div class="flex flex-col gap-1 min-w-0"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Totales</span><span class="text-[28px] leading-tight font-bold text-on-surface truncate" id="dashQtyTotal">—</span></div><div class="flex flex-col gap-1 min-w-0"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Pendientes</span><span class="text-[28px] leading-tight font-bold text-[#b45309] truncate" id="dashQtyPend">—</span></div><div class="flex flex-col gap-1 min-w-0"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Avanzadas</span><span class="text-[28px] leading-tight font-bold text-secondary truncate" id="dashQtyAdv">—</span></div></div>
 <div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden"><div class="h-full bg-secondary rounded-full transition-all duration-700" id="dashQtyBar" style="width:0%"></div></div>
 </div>
 
 <div class="bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm flex flex-col gap-gutter-sm">
-<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[22px]">tag</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Códigos (WITCUS)</span></div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[22px]">tag</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Códigos (WITCUS)</span><span class="ml-auto bg-secondary-container text-on-secondary-container px-2.5 py-0.5 rounded-full font-label-md text-label-md font-bold" id="dashCodPct">0%</span></div>
 <div class="grid grid-cols-3 gap-gutter-sm"><div class="flex flex-col gap-1 min-w-0"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Totales</span><span class="text-[28px] leading-tight font-bold text-on-surface truncate" id="dashCodTotal">—</span></div><div class="flex flex-col gap-1 min-w-0"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Pendientes</span><span class="text-[28px] leading-tight font-bold text-[#b45309] truncate" id="dashCodPend">—</span></div><div class="flex flex-col gap-1 min-w-0"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Avanzados</span><span class="text-[28px] leading-tight font-bold text-secondary truncate" id="dashCodAdv">—</span></div></div>
 <div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden"><div class="h-full bg-secondary rounded-full transition-all duration-700" id="dashCodBar" style="width:0%"></div></div>
 <span class="font-label-sm text-label-sm text-outline" id="dashCodNota">Avanzado = código sin pendiente.</span>
@@ -2327,7 +2327,7 @@ function abrirDashboard() {
 function renderDashboard() {
   const needle = document.getElementById('dashGaugeNeedle');
   if (!needle) return;
-  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };   // textContent: también funciona en el <text> del SVG
   const listo = allDataRaw.length > 0;
   const rows = dashRows().filter(r => matchesFilter('dashboardDocumento', r.WDREF));
 
@@ -2352,7 +2352,10 @@ function renderDashboard() {
   // Velocímetro
   const pct = tot > 0 ? Math.max(0, Math.min(100, ing / tot * 100)) : 0;
   needle.style.transform = `rotate(${(-90 + pct * 1.8).toFixed(2)}deg)`;
-  set('dashPct', (listo ? pct.toLocaleString('es-PE', { maximumFractionDigits: 1 }) : '0') + '%');
+  const fmtPct = (v) => v.toLocaleString('es-PE', { maximumFractionDigits: 1 }) + '%';
+  set('dashPct', fmtPct(listo ? pct : 0));
+  const pctEl = document.getElementById('dashPct');
+  if (pctEl) pctEl.style.color = pct < 40 ? '#ba1a1a' : (pct < 75 ? '#b45309' : '#2c694e');   // mismo código de color que el velocímetro
   set('dashGaugeCaption', !listo ? 'Cargando datos...' :
     `${fmtN(ing)} de ${fmtN(tot)} unidades ingresadas · ${documentos.size} documento(s) · ${rows.length} línea(s)`);
 
@@ -2361,6 +2364,7 @@ function renderDashboard() {
   set('dashQtyPend', listo ? fmtN(pen) : '—');
   set('dashQtyAdv', listo ? fmtN(ing) : '—');
   document.getElementById('dashQtyBar').style.width = pct + '%';
+  set('dashQtyPct', fmtPct(listo ? pct : 0));
 
   // Códigos
   const codTotal = porCodigo.size;
@@ -2370,7 +2374,9 @@ function renderDashboard() {
   set('dashCodPend', listo ? fmtN(codPend) : '—');
   set('dashCodAdv', listo ? fmtN(codAdv) : '—');
   set('dashCodNota', 'Avanzado = código sin pendiente.' + (listo && codParcial ? ` ${fmtN(codParcial)} pendiente(s) ya tienen avance parcial.` : ''));
-  document.getElementById('dashCodBar').style.width = (codTotal > 0 ? codAdv / codTotal * 100 : 0) + '%';
+  const pctCod = codTotal > 0 ? codAdv / codTotal * 100 : 0;
+  document.getElementById('dashCodBar').style.width = pctCod + '%';
+  set('dashCodPct', fmtPct(listo ? pctCod : 0));
 
   // Códigos nuevos (según la Maestra de la cuenta)
   const maestra = maestraPorCuenta[dashAccount];
