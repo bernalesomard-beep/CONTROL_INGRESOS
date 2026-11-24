@@ -289,13 +289,14 @@
       <div class="p-4 border-b border-slate-200/80 flex items-center gap-2">
         <h3 class="text-sm font-bold text-slate-900">Partidas de Almacén</h3>
         <span class="px-2 py-0.5 rounded-full text-[11px] mono font-medium bg-slate-100 text-slate-700" id="matchCountLabel">0 Coincidencias</span>
+        <button class="btn-danger hidden ml-2" id="btnEliminarCompras" onclick="eliminarSeleccionCompras()" type="button"><span class="material-symbols-outlined text-[16px]">delete</span><span id="btnEliminarComprasLabel">Eliminar</span></button>
         <span class="ml-auto text-[11px] text-slate-400 hidden md:inline">Orden: WSEQ (ascendente)</span>
       </div>
       <div class="overflow-x-auto"><table class="w-full border-collapse">
         <thead><tr class="bg-slate-50/80 border-b border-slate-200">
           <th class="th w-10 text-center"><input class="w-4 h-4 accent-slate-900 cursor-pointer" id="comprasSelectAll" onclick="toggleComprasSelectAll(this.checked)" type="checkbox"/></th>
           <th class="th min-w-[130px]">Código</th><th class="th min-w-[220px]">Descripción</th><th class="th text-right min-w-[140px]">EAN 13</th>
-          <th class="th text-center">Lote</th><th class="th text-center">Expira</th><th class="th text-right">Solicitado</th><th class="th text-right">Pendiente</th><th class="th text-right">Ingresado</th><th class="th w-12"></th>
+          <th class="th text-center">Lote</th><th class="th text-center whitespace-nowrap min-w-[120px]">Expira</th><th class="th text-right">Solicitado</th><th class="th text-right">Pendiente</th><th class="th text-right">Ingresado</th><th class="th w-20"></th>
         </tr></thead>
         <tbody class="divide-y divide-slate-100" id="tableBody"><tr><td class="td text-center text-slate-400 py-6" colspan="10">Cargando datos desde Google Sheets...</td></tr></tbody>
       </table></div>
@@ -352,7 +353,7 @@
         <p class="text-xs text-slate-500 mt-0.5" id="observacionesSyncTimeLabel">Sincronizando...</p>
       </div>
       <div class="flex items-center gap-2">
-        <button class="btn" onclick="loadData(true)" type="button"><span class="material-symbols-outlined text-[16px] text-slate-500">sync</span>Sincronizar</button>
+        <button class="btn" onclick="syncActual()" type="button"><span class="material-symbols-outlined text-[16px] text-slate-500">sync</span>Sincronizar</button>
         <button class="btn" onclick="exportObservacionesXLS()" type="button"><span class="material-symbols-outlined text-[16px] text-slate-500">download</span>Descargar XLS</button>
       </div>
     </div>
@@ -751,6 +752,7 @@ async function loadData(isManualSync) {
   hIcon.classList.add('animate-spin');
   try {
     allDataRaw = await fetchTodasLasCuentas(CSV_URLS, isManualSync);
+    aplicarPendientesCompras();
     allData = filasDeCuenta(allDataRaw);
     const hora = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
     const syncMsg = 'Google Sheets • Sincronizado ' + hora;
@@ -772,7 +774,7 @@ function syncActual() {
   if (currentModule === 'entradas') loadEntradasData(true);
   else if (currentModule === 'usuarios') loadUsuariosData(true);
   else if (currentModule === 'maestra') loadMaestraData(true);
-  else loadData(true);
+  else { if (currentModule === 'observaciones') loadEntradasData(true); loadData(true); }
 }
 
 /* ===================== COMPRAS: FILTROS Y TABLA ===================== */
@@ -844,13 +846,21 @@ function renderTable() {
       <td class="td"><div class="flex flex-col"><span class="font-medium text-slate-900">${H(r['Descripción del material'])}</span><span class="text-[11px] text-slate-400">Pedido ${H(r.WDREF || '—')} • Seq ${H(r.WSEQ || '—')}</span></div></td>
       <td class="td text-right mono">${H(r.EAN || '—')}</td>
       <td class="td text-center mono"><span class="bg-slate-100 px-2 py-0.5 rounded">${H(r.WLTCUS || '—')}</span></td>
-      <td class="td text-center mono">${formatDate(r.WEXPDT)}</td>
+      <td class="td text-center mono whitespace-nowrap">${formatDate(r.WEXPDT)}</td>
       <td class="td text-right mono font-semibold"><span class="${qtyCls} px-2 py-0.5 rounded">${H(r.WQTY || 0)}</span></td>
       <td class="td text-right mono">${(r.CANTIDAD !== undefined && r.CANTIDAD !== '') ? H(r.CANTIDAD) : '—'}</td>
       <td class="td text-right mono">${(r.INGRESO !== undefined && r.INGRESO !== '') ? H(r.INGRESO) : '—'}</td>
-      <td class="td text-center"><span class="material-symbols-outlined text-[18px] text-slate-400">chevron_right</span></td>
+      <td class="td text-center whitespace-nowrap" onclick="event.stopPropagation()">
+        <button class="p-1 text-slate-400 hover:text-rose-600 rounded" onclick="eliminarLineasCompras([${realIdx}])" title="Eliminar línea" type="button"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+        <span class="material-symbols-outlined text-[18px] text-slate-400 align-middle">chevron_right</span></td>
     </tr>`;
   }).join('');
+  actualizarBotonEliminarCompras();
+}
+function actualizarBotonEliminarCompras() {
+  const b = document.getElementById('btnEliminarCompras'); if (!b) return;
+  b.classList.toggle('hidden', selectedCompras.size === 0);
+  document.getElementById('btnEliminarComprasLabel').innerText = 'Eliminar (' + selectedCompras.size + ')';
 }
 function toggleComprasSelectAll(checked) {
   filteredData().forEach(r => { const idx = allData.indexOf(r); if (checked) selectedCompras.add(idx); else selectedCompras.delete(idx); });
@@ -858,8 +868,48 @@ function toggleComprasSelectAll(checked) {
 }
 function toggleComprasSelect(idx, checked) {
   if (checked) selectedCompras.add(idx); else selectedCompras.delete(idx);
+  actualizarBotonEliminarCompras();
   const box = document.getElementById('comprasSelectAll');
   if (box) { const d = filteredData(); box.checked = d.length > 0 && d.every(r => selectedCompras.has(allData.indexOf(r))); }
+}
+const comprasPendientes = { del: {} };
+function aplicarPendientesCompras() {
+  const now = Date.now();
+  Object.keys(comprasPendientes.del).forEach(k => { if (now - comprasPendientes.del[k] > ENTRADAS_PENDIENTE_TTL_MS) delete comprasPendientes.del[k]; });
+  if (!Object.keys(comprasPendientes.del).length) return;
+  // La hoja publicada tarda en actualizarse: ocultamos las líneas ya eliminadas hasta que el CSV las deje de traer.
+  allDataRaw = allDataRaw.filter(r => !((cuentaDe(r) + '|' + (r.ID_DATA || '').toString().trim()) in comprasPendientes.del));
+}
+function eliminarSeleccionCompras() {
+  eliminarLineasCompras(Array.from(selectedCompras).sort((a, b) => a - b));
+}
+async function eliminarLineasCompras(indices) {
+  const filas = indices.map(i => allData[i]).filter(Boolean);
+  if (!filas.length) return;
+  if (filas.some(r => !(r.ID_DATA || '').toString().trim())) { alert('Alguna línea no tiene ID_DATA en la hoja DATA, no se puede eliminar.'); return; }
+  if (!scriptUrl() || scriptUrl().indexOf('REEMPLAZA_CON') === 0) { alert('Falta configurar la URL de Apps Script de esta cuenta.'); return; }
+  const msg = filas.length === 1
+    ? '¿Eliminar la línea ' + (filas[0].WITCUS || '') + ' (Pedido ' + (filas[0].WDREF || '—') + ' • Seq ' + (filas[0].WSEQ || '—') + ') de la hoja DATA?\nEsta acción no se puede deshacer.'
+    : '¿Eliminar ' + filas.length + ' líneas de la hoja DATA?\nEsta acción no se puede deshacer.';
+  if (!confirm(msg)) return;
+  if (!currentUser) {
+    currentUser = await solicitarLogin();
+    if (!currentUser) { alert('Inicio de sesión cancelado o inválido.'); return; }
+    document.getElementById('headerUser').innerText = currentUser;
+  }
+  try {
+    const ids = filas.map(r => r.ID_DATA.toString().trim());
+    const data = await postAppsScript({ action: 'eliminarLineasData', idsData: ids, usuario: currentUser });
+    ids.forEach(id => { comprasPendientes.del[currentAccount + '|' + id] = Date.now(); });
+    const quitar = new Set(filas);
+    allDataRaw = allDataRaw.filter(r => !quitar.has(r));
+    allData = filasDeCuenta(allDataRaw);
+    selectedCompras.clear(); currentIndex = -1; closeDrawer();
+    populateComprasFilters(); renderTable();
+    populateObservacionesFilters(); renderObservacionesTable();
+    populateDashboardFilters(); renderDashboard();
+    if (data.noEncontradas && data.noEncontradas.length) alert('Estos ID_DATA ya no existían en la hoja: ' + data.noEncontradas.join(', '));
+  } catch (err) { console.error(err); alert('Error al eliminar: ' + err.message); }
 }
 function exportComprasXLS() {
   const base = filteredData();
@@ -1060,7 +1110,7 @@ function showModule(name) {
   });
   document.getElementById('accountSegment').style.visibility = (name === 'usuarios') ? 'hidden' : 'visible';
   closeDrawer();
-  if (name === 'entradas' && !entradasLoaded) loadEntradasData(false);
+  if ((name === 'entradas' || name === 'observaciones') && !entradasLoaded) loadEntradasData(false);
   if (name === 'dashboard') { if (!entradasLoaded) loadEntradasData(false); populateDashboardFilters(); renderDashboard(); }
   if (name === 'usuarios' && !usuariosLoaded) loadUsuariosData(false);
   if (name === 'maestra' && !maestraLoaded) loadMaestraData(false);
@@ -1101,7 +1151,7 @@ async function loadEntradasData(isManualSync) {
     entradasLoaded = true; selectedEntradas.clear();
     setDot(dot, 'ok');
     lbl.innerText = 'Google Sheets • Sincronizado ' + new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-    populateEntradasFilters(); renderEntradasTable(); renderDashboard();
+    populateEntradasFilters(); renderEntradasTable(); renderDashboard(); renderObservacionesTable();
   } catch (err) {
     setDot(dot, 'err'); lbl.innerText = 'Error de sincronización';
     document.getElementById('entradasTableBody').innerHTML = `<tr><td class="td text-center text-rose-600 py-6" colspan="19">No se pudo cargar la hoja. Revisa la conexión o el enlace publicado.</td></tr>`;
@@ -1236,7 +1286,7 @@ async function eliminarLineaEntrada(idx) {
     entradasPendientes.del[idMov] = Date.now();
     const k = entradasDataRaw.indexOf(r); if (k > -1) entradasDataRaw.splice(k, 1);
     entradasData.splice(idx, 1);
-    populateEntradasFilters(); renderEntradasTable();
+    populateEntradasFilters(); renderEntradasTable(); renderObservacionesTable();
   } catch (err) { console.error(err); alert('Error al eliminar: ' + err.message); }
 }
 function exportEntradasXLS() {
@@ -1301,12 +1351,45 @@ function populateObservacionesFilters() {
   initFilterMultiselect('observacionesOC', uniqueValues(allData, 'DOCUMENTO DE COMPRAS'));
   initFilterMultiselect('observacionesCodigo', uniqueValues(allData, 'WITCUS'));
 }
-function filteredObservaciones() {
-  return allData.filter(r => {
-    if (isConformeStatus(r.ESTATUS)) return false;
-    return matchesFilter('observacionesDocumento', r.WDREF) && matchesFilter('observacionesProveedor', r['RAZON SOCIAL DEL PROVEEDOR']) &&
-      matchesFilter('observacionesOC', r['DOCUMENTO DE COMPRAS']) && matchesFilter('observacionesCodigo', r.WITCUS);
+// Fuente de las observaciones: CADA registro de la hoja de Entradas con estatus no conforme
+// (una misma línea puede tener varios: FALTANTE y MAL ESTADO), más las líneas de DATA marcadas no conformes
+// que no tengan ya su registro en Entradas. Así no se pierde ninguna.
+function observacionesBase() {
+  const out = [], vistos = new Set();
+  const kLinea = (doc, cod, lote, est) => [doc, cod, lote, est].map(normTxt).join('|');
+  entradasData.forEach((e, i) => {
+    const kEst = Object.keys(e).find(x => x.trim().toUpperCase() === 'ESTATUS');
+    const est = kEst ? (e[kEst] || '').toString().trim() : '';
+    if (isConformeStatus(est)) return;
+    const c = compraDeEntrada(e) || {};
+    const doc = e.WDREF || e.DOCUMENTO || '';
+    const obsPropia = (e.OBSERVACIONES || '').toString().trim();
+    const obsCompra = (normTxt(c.ESTATUS) === normTxt(est)) ? (c.OBSERVACIONES || '') : '';   // solo si es del mismo estatus
+    out.push({
+      _key: 'E' + i, WITCUS: e.WITCUS || c.WITCUS || '', 'Descripción del material': c['Descripción del material'] || '',
+      'RAZON SOCIAL DEL PROVEEDOR': e.PROVEEDOR || c['RAZON SOCIAL DEL PROVEEDOR'] || '',
+      'DOCUMENTO DE COMPRAS': e.OC || c['DOCUMENTO DE COMPRAS'] || '', WDREF: doc, WLTCUS: e.WLTCUS || c.WLTCUS || '',
+      INGRESO: e.WQTY || '', USUARIO: e.USUARIO || '', REGISTRO: e.REGISTRO || '',
+      'ESTATUS LOTE': c['ESTATUS LOTE'] || '', ESTATUS: est, OBSERVACIONES: obsPropia || obsCompra
+    });
+    vistos.add(kLinea(doc, e.WITCUS, e.WLTCUS, est));
   });
+  allData.forEach((c, i) => {
+    if (isConformeStatus(c.ESTATUS)) return;
+    if (vistos.has(kLinea(c.WDREF, c.WITCUS, c.WLTCUS, c.ESTATUS))) return;
+    out.push({
+      _key: 'D' + i, WITCUS: c.WITCUS || '', 'Descripción del material': c['Descripción del material'] || '',
+      'RAZON SOCIAL DEL PROVEEDOR': c['RAZON SOCIAL DEL PROVEEDOR'] || '', 'DOCUMENTO DE COMPRAS': c['DOCUMENTO DE COMPRAS'] || '',
+      WDREF: c.WDREF || '', WLTCUS: c.WLTCUS || '', INGRESO: c.INGRESO || '', USUARIO: c.USUARIO || '', REGISTRO: c.REGISTRO || '',
+      'ESTATUS LOTE': c['ESTATUS LOTE'] || '', ESTATUS: c.ESTATUS || '', OBSERVACIONES: c.OBSERVACIONES || ''
+    });
+  });
+  return out;
+}
+function filteredObservaciones() {
+  return observacionesBase().filter(r =>
+    matchesFilter('observacionesDocumento', r.WDREF) && matchesFilter('observacionesProveedor', r['RAZON SOCIAL DEL PROVEEDOR']) &&
+    matchesFilter('observacionesOC', r['DOCUMENTO DE COMPRAS']) && matchesFilter('observacionesCodigo', r.WITCUS));
 }
 function limpiarFiltrosObservaciones() {
   ['observacionesDocumento', 'observacionesProveedor', 'observacionesOC', 'observacionesCodigo'].forEach(key => {
@@ -1315,17 +1398,19 @@ function limpiarFiltrosObservaciones() {
   renderObservacionesTable();
 }
 function renderObservacionesTable() {
+  const todas = observacionesBase();
+  const llaves = new Set(todas.map(r => r._key));
+  Array.from(selectedObservaciones).forEach(k => { if (!llaves.has(k)) selectedObservaciones.delete(k); });
   const data = filteredObservaciones(), tbody = document.getElementById('observacionesTableBody');
-  const total = allData.filter(r => !isConformeStatus(r.ESTATUS)).length;
+  const total = todas.length;
   document.getElementById('observacionesCountLabel').innerText = `${total} líneas no conformes`;
   document.getElementById('navObsBadge').innerText = total;
   document.getElementById('observacionesMatchCountLabel').innerText = `${data.length} Coincidencias`;
   document.getElementById('observacionesFooterCountLabel').innerText = `Mostrando ${data.length} de ${total} registros`;
   if (!data.length) { tbody.innerHTML = `<tr><td class="td text-center text-slate-400 py-6" colspan="13">Sin líneas con observación para este filtro.</td></tr>`; return; }
   tbody.innerHTML = data.map(r => {
-    const i = allData.indexOf(r);
     return `<tr class="hover:bg-slate-50/70 transition-colors">
-      <td class="py-2.5 px-3 text-center"><input class="w-4 h-4 accent-slate-900 cursor-pointer" onclick="toggleObservacionesSelect(${i}, this.checked)" type="checkbox" ${selectedObservaciones.has(i) ? 'checked' : ''}/></td>
+      <td class="py-2.5 px-3 text-center"><input class="w-4 h-4 accent-slate-900 cursor-pointer" onclick="toggleObservacionesSelect('${r._key}', this.checked)" type="checkbox" ${selectedObservaciones.has(r._key) ? 'checked' : ''}/></td>
       <td class="td mono font-semibold text-slate-900">${H(r.WITCUS || '—')}</td>
       <td class="td">${H(r['Descripción del material'] || '—')}</td>
       <td class="td">${H(r['RAZON SOCIAL DEL PROVEEDOR'] || '—')}</td>
@@ -1341,17 +1426,17 @@ function renderObservacionesTable() {
   }).join('');
 }
 function toggleObservacionesSelectAll(checked) {
-  filteredObservaciones().forEach(r => { const i = allData.indexOf(r); if (checked) selectedObservaciones.add(i); else selectedObservaciones.delete(i); });
+  filteredObservaciones().forEach(r => { if (checked) selectedObservaciones.add(r._key); else selectedObservaciones.delete(r._key); });
   renderObservacionesTable();
 }
-function toggleObservacionesSelect(idx, checked) {
-  if (checked) selectedObservaciones.add(idx); else selectedObservaciones.delete(idx);
+function toggleObservacionesSelect(key, checked) {
+  if (checked) selectedObservaciones.add(key); else selectedObservaciones.delete(key);
   const box = document.getElementById('observacionesSelectAll');
-  if (box) { const d = filteredObservaciones(); box.checked = d.length > 0 && d.every(r => selectedObservaciones.has(allData.indexOf(r))); }
+  if (box) { const d = filteredObservaciones(); box.checked = d.length > 0 && d.every(r => selectedObservaciones.has(r._key)); }
 }
 function exportObservacionesXLS() {
   const base = filteredObservaciones();
-  const data = selectedObservaciones.size ? base.filter(r => selectedObservaciones.has(allData.indexOf(r))) : base;
+  const data = selectedObservaciones.size ? base.filter(r => selectedObservaciones.has(r._key)) : base;
   if (!data.length) return;
   const COLS = ['WITCUS', 'Descripción del material', 'RAZON SOCIAL DEL PROVEEDOR', 'DOCUMENTO DE COMPRAS', 'WDREF', 'WLTCUS', 'INGRESO', 'USUARIO', 'REGISTRO', 'ESTATUS LOTE', 'ESTATUS', 'OBSERVACIONES'];
   const rows = data.map(r => { const o = {}; COLS.forEach(c => { o[c] = r[c] || ''; }); return o; });
@@ -1458,13 +1543,32 @@ function renderMaestraTable() {
 }
 function descargarCodigoNuevo() {
   if (!maestraLoaded) { alert('Todavía no se cargó la Maestra de Artículos, espera un momento e intenta de nuevo.'); return; }
-  const COLS = ['RAZON SOCIAL DEL PROVEEDOR', 'DOCUMENTO DE COMPRAS', 'WINGDT', 'WITCUS', 'Descripción del material', 'EAN'];
-  const data = allData.filter(r => esCodigoNuevo(r.WITCUS));
-  if (!data.length) { alert('No hay líneas con Código Nuevo en este momento.'); return; }
-  const rows = data.map(r => { const o = {}; COLS.forEach(c => { o[c] = r[c] || ''; }); return o; });
+  // Solo lo que se ve con los filtros actuales (Documento, Proveedor, OC, Código, búsqueda y chip);
+  // si además hay filas marcadas con el check, solo esas.
+  const base = filteredData();
+  const visibles = selectedCompras.size ? base.filter(r => selectedCompras.has(allData.indexOf(r))) : base;
+  const data = visibles.filter(r => esCodigoNuevo(r.WITCUS));
+  if (!data.length) { alert('No hay líneas con Código Nuevo dentro de los filtros aplicados.'); return; }
+  const COLS = ['REFERENCIA', 'FECHA', 'CUENTA', 'Código de producto', 'Descripcion', 'EAN 13'];
+  const hoy = new Date();
+  const fecha = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0') + '-' + String(hoy.getDate()).padStart(2, '0');
+  const cuenta = CUENTAS[currentAccount].nombre.toUpperCase();
+  const esGlimmer = currentAccount === '254';   // en Glimmer el código de producto es el EAN
+  const vistos = new Set(), rows = [];
+  data.forEach(r => {
+    const ean = (r.EAN || '').toString().trim(), witcus = (r.WITCUS || '').toString().trim();
+    const codigo = esGlimmer ? (ean || witcus) : witcus;
+    const ref = [(r['RAZON SOCIAL DEL PROVEEDOR'] || '').toString().trim(), (r['DOCUMENTO DE COMPRAS'] || '').toString().trim()].filter(Boolean).join(' - ');
+    const key = ref + '|' + codigo;
+    if (vistos.has(key)) return;            // un mismo código con varios lotes sale una sola vez
+    vistos.add(key);
+    rows.push({ 'REFERENCIA': ref, 'FECHA': fecha, 'CUENTA': cuenta, 'Código de producto': codigo,
+      'Descripcion': (r['Descripción del material'] || '').toString().trim(), 'EAN 13': ean });
+  });
   const ws = XLSX.utils.json_to_sheet(rows, { header: COLS }), wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Codigo Nuevo');
-  XLSX.writeFile(wb, 'codigo_nuevo.xls', { bookType: 'biff8' });
+  ws['!cols'] = [{ wch: 36 }, { wch: 11 }, { wch: 10 }, { wch: 20 }, { wch: 60 }, { wch: 15 }];
+  XLSX.utils.book_append_sheet(wb, ws, 'Plantilla');
+  XLSX.writeFile(wb, 'Plantilla_Productos.xls', { bookType: 'biff8' });
 }
 
 /* ===================== DASHBOARD (mismos criterios del código antiguo) ===================== */
